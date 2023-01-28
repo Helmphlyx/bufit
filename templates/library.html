@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+    <title>BUFit</title>
+</head>
+{% block content %}
+<h1>{% block title %} Your liked Exercises {% endblock %}</h1>
+{% for exercise in exercises %}
+<a href="{{ url_for('exercise', exercise_id=exercise['id']) }}">
+    <h2>{{ exercise['name'] }}</h2>
+</a>
+<p>{{ exercise['muscle'] }}</p>
+<p>{{ exercise['description'] }}</p>
+<span class="badge badge-primary">{{ exercise['created'] }}</span>
+<a href="{{ url_for('edit', id=exercise['id']) }}">
+    <span class="badge badge-warning">Edit</span>
+</a>
+<hr>
+{% endfor %}
+
+<h1>Your liked Workouts</h1>
+{% for workout in workouts %}
+<a href="{{ url_for('workout', workout_id=workout['id']) }}">
+    <h2>{{ workout['name'] }}</h2>
+</a>
+<p>{{ workout['author'] }}</p>
+<p>{{ workout['description'] }}</p>
+<span class="badge badge-primary">{{ workout['created'] }}</span>
+<a href="{{ url_for('edit', id=workout['id']) }}">
+    <span class="badge badge-warning">Edit</span>
+</a>
+<hr>
+{% endfor %}
+{% endblock %}

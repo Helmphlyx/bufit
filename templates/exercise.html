@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{% block name %} {{ exercise['name'] }} {% endblock %}</h2>
+<span class="badge badge-primary">{{ exercise['created'] }}</span>
+<p>{{ exercise['muscle'] }}</p>
+<p>{{ exercise['description'] }}</p>
+
+<form method="post">
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Like</button>
+    </div>
+</form>
+{% endblock %}
