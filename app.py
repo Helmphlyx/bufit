@@ -73,17 +73,16 @@ def create_account():
 @app.route("/create_exercise", methods=("GET", "POST"))
 def create_exercise():
     if request.method == "POST":
-        name = request.form["name"]
-        muscle = request.form["muscle"]
-        description = request.form["description"]
-
+        name = request.form.get("name")
+        muscle = request.form.get("muscle")
+        description = request.form.get("description")
         if not name:
             flash("Exercise name is required!")
         else:
-            sql_utils = SqliteUtilites("database.db")
+            sql_utils = SqliteUtilites(DATABASE_NAME)
             sql_utils.execute(
                 "INSERT INTO exercises (name, muscle, description) VALUES"
-                f" ({name}, {muscle}, {description})",
+                f" ('{name}', '{muscle}', '{description}')",
                 commit=True,
             )
             return redirect(url_for("home"))
