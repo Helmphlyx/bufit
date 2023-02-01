@@ -133,9 +133,8 @@ def add_exercise_to_workout(workout_id):
             )
 
     selected_exercises = db_utils.execute(
-        "SELECT * FROM exercises a INNER JOIN workout_exercises b ON a.id in"
-        " (SELECT ExercisesID FROM workout_exercises WHERE WorkoutID ="
-        f" {workout_id})",
+        "SELECT * FROM workout_exercises b INNER JOIN exercises a ON a.id ="
+        f" b.ExercisesID AND b.WorkoutID = {workout_id}",
         fetch_all=True,
     )
 
@@ -233,9 +232,8 @@ def workout(workout_id):
         return redirect(url_for("home"))
 
     selected_exercises = db_utils.execute(
-        "SELECT * FROM exercises a INNER JOIN workout_exercises b ON a.id in"
-        " (SELECT ExercisesID FROM workout_exercises WHERE WorkoutID ="
-        f" {workout_id})",
+        "SELECT * FROM workout_exercises b INNER JOIN exercises a ON a.id ="
+        f" b.ExercisesID AND b.WorkoutID = {workout_id}",
         fetch_all=True,
     )
     return render_template(
@@ -266,11 +264,11 @@ def edit_workout(workout_id):
             return redirect(url_for("search_workouts"))
 
     selected_exercises = db_utils.execute(
-        "SELECT * FROM workout_exercises b INNER JOIN exercises a ON a.id in"
-        " (SELECT ExercisesID FROM workout_exercises WHERE WorkoutID ="
-        f" {workout_id}) WHERE b.WorkoutID = {workout_id}",
+        "SELECT * FROM workout_exercises b INNER JOIN exercises a ON a.id ="
+        f" b.ExercisesID AND b.WorkoutID = {workout_id}",
         fetch_all=True,
     )
+
     return render_template(
         "edit_workout.html",
         workout=workout_artifact,
