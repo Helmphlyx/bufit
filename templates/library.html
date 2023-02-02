@@ -6,7 +6,7 @@
     <title>BUFit</title>
 </head>
 {% block content %}
-<h1>{% block title %} Your liked Exercises {% endblock %}</h1>
+<h1 class = "library-title">{% block title %} Your liked Exercises {% endblock %}</h1>
 {% for exercise in exercises %}
 <a href="{{ url_for('exercise', exercise_id=exercise['id']) }}">
     <h2>{{ exercise['name'] }}</h2>
@@ -20,7 +20,7 @@
 <hr>
 {% endfor %}
 
-<h1>Your liked Workouts</h1>
+<h1 class = "library-title">Your liked Workouts</h1>
 {% for workout in workouts %}
 <a href="{{ url_for('workout', workout_id=workout['id']) }}">
     <h2>{{ workout['name'] }}</h2>
