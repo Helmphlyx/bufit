@@ -13,3 +13,6 @@ h1 {
     max-width: 90px;
     height: auto;
 }
+.nav-item a span {
+    margin-left:8px;
+}

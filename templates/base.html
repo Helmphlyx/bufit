@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!--CSS styles-->
     <link rel ="stylesheet" href = "../static/css/style.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <title>{% block title %} {% endblock %}</title>
 </head>
 <body>
@@ -20,11 +22,15 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('home')}}">Home</a>
+                <a class="nav-link" href="{{ url_for('home')}}">
+                    <i class="bi bi-house-door"></i>
+                    <span>Home</span>
+                </a>
             </li>
             <li class="nav-item dropdown">
                 <a class="search-menu nav-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false" >
-                    Search
+                    <i class="bi bi-search"></i>
+                    <span>Search</span>
                 </a>
                 <ul class = "dropdown-menu" >
                     <li>
@@ -36,13 +42,23 @@
                 </ul> 
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('library')}}">Library</a>
+                <a class="nav-link" href="{{ url_for('library')}}">
+                    <i class="bi bi-collection"></i>
+                    <span>Library</span>
+                </a>
+
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('create_exercise')}}">Add Exercise</a>
+                <a class="nav-link" href="{{ url_for('create_exercise')}}">
+                    <i class="bi bi-plus-square-dotted"></i>
+                    <span>Add Exercise</span>
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('create_workout')}}">Create Workout</a>
+                <a class="nav-link" href="{{ url_for('create_workout')}}">
+                    <i class="bi bi-plus-square"></i>
+                    <span>Create Workout</span>
+                </a>
             </li>
         </ul>
     </div>
