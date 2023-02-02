@@ -6,6 +6,7 @@ from sqlite_utilities import SqliteUtilites
 DATABASE_NAME = "database.db"
 
 
+# Generic DB Queries
 def get_exercise(exercise_id: int):
     db_utils = SqliteUtilites(DATABASE_NAME)
     exercise_artifact = db_utils.execute(
@@ -28,13 +29,27 @@ def get_workout(workout_id: int):
     return exercise_artifact
 
 
+def get_exercises_for_workout(workout_id: int):
+    db_utils = SqliteUtilites(DATABASE_NAME)
+    selected_exercises_artifact = db_utils.execute(
+        "SELECT * FROM workout_exercises b INNER JOIN exercises a ON a.id ="
+        f" b.ExercisesID AND b.WorkoutID = {workout_id}",
+        fetch_all=True,
+    )
+
+    if selected_exercises_artifact is None:
+        abort(404)
+    return selected_exercises_artifact
+
+
+# Global Settings
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "SOME_SECRET_KEY_VALUE"
 app.url_map.strict_slashes = False
 
 global_user = None
 
-
+# Pages
 @app.route("/home")
 def home():
     return render_template("home.html")
@@ -114,10 +129,8 @@ def create_workout():
 )
 def add_exercise_to_workout(workout_id):
     db_utils = SqliteUtilites(DATABASE_NAME)
-    selected_workout = db_utils.execute(
-        f"SELECT * FROM workouts WHERE id = {workout_id}"
-    )
-    exercises = db_utils.execute(f"SELECT * FROM exercises", fetch_all=True)
+    selected_workout = get_workout(workout_id)
+    exercises = db_utils.execute("SELECT * FROM exercises", fetch_all=True)
 
     if request.method == "POST":
         exercise_id = request.form.get("exercise")
@@ -132,11 +145,7 @@ def add_exercise_to_workout(workout_id):
                 commit=True,
             )
 
-    selected_exercises = db_utils.execute(
-        "SELECT * FROM workout_exercises b INNER JOIN exercises a ON a.id ="
-        f" b.ExercisesID AND b.WorkoutID = {workout_id}",
-        fetch_all=True,
-    )
+    selected_exercises = get_exercises_for_workout(workout_id)
 
     return render_template(
         "add_exercise_to_workout.html",
@@ -216,7 +225,6 @@ def exercise(exercise_id):
 
 @app.route("/workout/<int:workout_id>", methods=("GET", "POST"))
 def workout(workout_id):
-    db_utils = SqliteUtilites(DATABASE_NAME)
     workout_artifact = get_workout(workout_id)
 
     if request.method == "POST":
@@ -231,11 +239,7 @@ def workout(workout_id):
         )
         return redirect(url_for("home"))
 
-    selected_exercises = db_utils.execute(
-        "SELECT * FROM workout_exercises b INNER JOIN exercises a ON a.id ="
-        f" b.ExercisesID AND b.WorkoutID = {workout_id}",
-        fetch_all=True,
-    )
+    selected_exercises = get_exercises_for_workout(workout_id)
     return render_template(
         "workout.html",
         workout=workout_artifact,
@@ -245,7 +249,6 @@ def workout(workout_id):
 
 @app.route("/<int:workout_id>/edit_workout", methods=("GET", "POST"))
 def edit_workout(workout_id):
-    db_utils = SqliteUtilites(DATABASE_NAME)
     workout_artifact = get_workout(workout_id)
 
     if request.method == "POST":
@@ -263,11 +266,7 @@ def edit_workout(workout_id):
             )
             return redirect(url_for("search_workouts"))
 
-    selected_exercises = db_utils.execute(
-        "SELECT * FROM workout_exercises b INNER JOIN exercises a ON a.id ="
-        f" b.ExercisesID AND b.WorkoutID = {workout_id}",
-        fetch_all=True,
-    )
+    selected_exercises = get_exercises_for_workout(workout_id)
 
     return render_template(
         "edit_workout.html",
