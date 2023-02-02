@@ -1,9 +1,9 @@
 h1 {
-    border: 2px #eee solid;
-    color: brown;
+    color: rgb(209, 24, 24);
     text-align: center;
     padding: 10px;
-}
+    margin: 25px 0;
+    }
 .logo {
     max-width: 90px;
     height: auto;
