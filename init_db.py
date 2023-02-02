@@ -1,12 +1,12 @@
 import sqlite3
+from sqlite_utilities import SqliteUtilites
 
+db_utils = SqliteUtilites("database.db")
+db_utils.execute_from_file("db/sql/create_tables.sql")
+
+# SQL to initialize database tables
 connection = sqlite3.connect("database.db")
-
-with open("db/schema.sql") as f:
-    connection.executescript(f.read())
-
 cur = connection.cursor()
-
 cur.execute(
     "INSERT INTO exercises (name, muscle, description) VALUES (?, ?, ?)",
     (
@@ -41,6 +41,5 @@ cur.execute(
         " body and torso still.",
     ),
 )
-
 connection.commit()
 connection.close()

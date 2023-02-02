@@ -42,3 +42,16 @@ class SqliteUtilites(DatabaseUtilities):
 
         conn.close()
         return result
+
+    def execute_from_file(self, path: str):
+        """Execute sql from file."""
+        conn = self._get_db_connection()
+        with open(path) as f:
+            results = conn.executescript(f.read())
+
+        conn.commit()
+        conn.close()
+        return results
+
+    def cursor(self):
+        return self._get_db_connection().cursor()
