@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} Add a New Exercise  {% endblock %}</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for='name'>Name</label>
+        <input type="text" name="name"
+               placeholder="Exercise Name" class="form-control"
+               value="{{ request.form['name'] }}"></input>
+    </div>
+
+    <div class="form-group">
+        <label for='muscle'>Muscle</label>
+        <input type="text" name="muscle"
+               placeholder="Target Muscle(s)" class="form-control"
+               value="{{ request.form['muscle'] }}"></input>
+    </div>
+
+    <div class="form-group">
+        <label for='description'>Description</label>
+        <textarea name="description" placeholder="Description of Exercise"
+                  class="form-control">{{ request.form['description'] }}</textarea>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+{% endblock %}

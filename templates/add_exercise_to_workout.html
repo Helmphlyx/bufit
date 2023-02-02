@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} Workout: {{ workout['name'] }} {% endblock %}</h1>
+<span class="badge badge-primary">{{ workout['created'] }}</span>
+<h5>{{ workout['author'] }}</h5>
+<p>{{ workout['description'] }}</p>
+
+<h2>Exercise List</h2>
+{% if selected_exercises %}
+{% for selected_exercise in selected_exercises %}
+    <a href="{{ url_for('exercise', exercise_id=selected_exercise['id']) }}">{{selected_exercise['name']}} </a>
+    <a>Sets: {{ selected_exercise['num_sets'] }}</a>
+    <a>Reps: {{ selected_exercise['num_reps'] }}</a>
+    <br>
+{% endfor %}
+{% else %}
+    <p>No exercises have been added.</p>
+{% endif %}
+
+<h2>Add Exercises</h2>
+
+<form method="post" action="{{ url_for('add_exercise_to_workout', workout_id=workout['id']) }}">
+
+    <div class="form-group">
+        <select name=exercise class="form-control">
+            {% for exercise in exercises %}
+            <option value="{{exercise['id']}}" SELECTED>{{exercise['name']}}</option>"
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for='num_sets'>Number of Sets</label>
+        <input type="number" name="num_sets"
+               value=1 class="form-control"></input>
+    </div>
+
+    <div class="form-group">
+        <label for='num_reps'>Number of Reps</label>
+        <input type="number" name="num_reps"
+               value=1 class="form-control"></input>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Add Exercise</button>
+    </div>
+
+    <div class="form-group">
+    </div>
+
+</form>
+
+
+{% endblock %}

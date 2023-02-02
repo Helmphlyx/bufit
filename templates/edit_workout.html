@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} Edit Workout: {{ workout['name'] }} {% endblock %}</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="name">Title</label>
+        <input type="text" name="name" placeholder="Workout Name"
+               class="form-control"
+               value="{{ request.form['name'] or workout['name'] }}">
+        </input>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Content</label>
+        <textarea name="description" placeholder="Workout Description"
+                  class="form-control">{{ request.form['description'] or workout['description'] }}</textarea>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+<hr>
+
+<h2>Exercise List</h2>
+{% if selected_exercises %}
+{% for selected_exercise in selected_exercises %}
+    <a href="{{ url_for('exercise', exercise_id=selected_exercise['id']) }}">{{selected_exercise['name']}} </a>
+    <a>Sets: {{ selected_exercise['num_sets'] }}</a>
+    <a>Reps: {{ selected_exercise['num_reps'] }}</a>
+    <br>
+{% endfor %}
+{% else %}
+    <p>No exercises have been added.</p>
+{% endif %}
+
+<form action="{{ url_for('delete_workout', id=workout['id']) }}" method="POST">
+    <input type="submit" value="Delete Workout"
+           class="btn btn-danger btn-sm"
+           onclick="return confirm('Are you sure you want to delete this exercise?')">
+</form>
+
+{% endblock %}

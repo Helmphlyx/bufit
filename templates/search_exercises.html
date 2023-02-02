@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+    <title>BUFit</title>
+</head>
+{% block content %}
+<h1>{% block title %} Search Exercises {% endblock %}</h1>
+
+<h2>Target Muscle</h2>
+<form class="form-inline" method="POST" action="{{ url_for('search_exercises') }}">
+    <div class="form-group">
+        <select name=muscle class="form-control">
+            {% for muscle in muscles %}
+            <option value="{{muscle}}" SELECTED>{{muscle}}</option>"
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </div>
+</form>
+
+<h2>Exercises</h2>
+{% for exercise in exercises %}
+<a href="{{ url_for('exercise', exercise_id=exercise['id']) }}">
+    <h3>{{ exercise['name'] }}</h3>
+</a>
+<p>{{ exercise['muscle'] }}</p>
+<p>{{ exercise['description'] }}</p>
+<span class="badge badge-primary">{{ exercise['created'] }}</span>
+<a href="{{ url_for('edit', id=exercise['id']) }}">
+    <span class="badge badge-warning">Edit</span>
+</a>
+<hr>
+{% endfor %}
+{% endblock %}
