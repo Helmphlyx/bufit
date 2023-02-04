@@ -7,30 +7,50 @@
 </head>
 {% block content %}
 <h1 class = "library-title">{% block title %} Your liked Exercises {% endblock %}</h1>
-{% for exercise in exercises %}
-<a href="{{ url_for('exercise', exercise_id=exercise['id']) }}">
-    <h2>{{ exercise['name'] }}</h2>
-</a>
-<p>{{ exercise['muscle'] }}</p>
-<p>{{ exercise['description'] }}</p>
-<span class="badge badge-primary">{{ exercise['created'] }}</span>
-<a href="{{ url_for('edit', id=exercise['id']) }}">
-    <span class="badge badge-warning">Edit</span>
-</a>
-<hr>
-{% endfor %}
-
+<div class="library-section-wrapper">
+    {% for exercise in exercises %}
+    <div class= "card-wrapper">
+        <a class = "card-content" href="{{ url_for('exercise', exercise_id=exercise['id']) }}">
+            <div class = "card-img">
+                image
+            </div>
+            <div> 
+                <h4>{{ exercise['name'] }}</h4>
+                <p>Muscle: {{ exercise['muscle'] }}</p>   
+            </div>
+        </a>
+        <div class = "card-details">
+            <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('edit', id=exercise['id']) }}">
+                <i class="bi bi-pencil"></i>
+            </a>
+            <!-- TODO: Like button -->   
+        </div>
+    </div>
+    {% endfor %}
+</div>
 <h1 class = "library-title">Your liked Workouts</h1>
-{% for workout in workouts %}
-<a href="{{ url_for('workout', workout_id=workout['id']) }}">
-    <h2>{{ workout['name'] }}</h2>
-</a>
-<p>{{ workout['author'] }}</p>
-<p>{{ workout['description'] }}</p>
-<span class="badge badge-primary">{{ workout['created'] }}</span>
-<a href="{{ url_for('edit', id=workout['id']) }}">
-    <span class="badge badge-warning">Edit</span>
-</a>
-<hr>
-{% endfor %}
+<div class="library-section-wrapper">
+    {% for workout in workouts %}
+    <div class= "card-wrapper">
+        <a class = "card-content" href="{{ url_for('workout', workout_id=workout['id']) }}">
+            <div class = "card-img">
+                image
+            </div>
+            <div> 
+                <h4>{{ workout['name'] }}</h4>
+                <p>Author: {{ workout['author'] }}</p>   
+            </div>
+        </a>
+        <div class = "card-details">
+            <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('edit', id=workout['id']) }}">
+                <i class="bi bi-pencil"></i>
+            </a>
+            <!-- TODO: Like button -->   
+        </div>
+    </div>
+    
+    {% endfor %}
+</div>
+
+
 {% endblock %}
