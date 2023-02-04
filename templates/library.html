@@ -23,7 +23,10 @@
             <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('edit', id=exercise['id']) }}">
                 <i class="bi bi-pencil"></i>
             </a>
-            <!-- TODO: Like button -->   
+             <!-- TODO: Like button logic-->  
+             <a type = "button"  class = "btn-sm btn-outline-danger">
+                <i class = "bi bi-heart text-danger"></i>
+            </a>   
         </div>
     </div>
     {% endfor %}
@@ -45,7 +48,11 @@
             <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('edit', id=workout['id']) }}">
                 <i class="bi bi-pencil"></i>
             </a>
-            <!-- TODO: Like button -->   
+            <!-- TODO: Like button logic-->  
+            <a type = "button" class = "btn-sm btn-outline-danger">
+                <i class = "bi bi-heart text-danger"></i>
+            </a> 
+            
         </div>
     </div>
     

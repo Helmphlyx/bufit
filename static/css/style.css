@@ -17,9 +17,11 @@ h1 {
     margin-left:8px;
 }
 .card-wrapper {
-    border: 1px solid blue;
+    
     display: flex;
-    padding: 10px;
+    padding: 5px;
+    width: 360px;
+    justify-content: space-between;
 
 }
 .card-content  {
@@ -34,6 +36,11 @@ h1 {
 }
 .card-content h4 {
     color: black;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+.card-content p {
+    font-size: 1rem;
 }
 .card-content h4:hover {
     color: rgb(173, 18, 18);
@@ -52,7 +59,7 @@ h1 {
 .library-section-wrapper {
     display: flex;
     flex-direction: row; 
-    overflow: auto; 
+    flex-wrap: wrap; 
 }
 
         
