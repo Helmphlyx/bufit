@@ -26,7 +26,7 @@
 <h2>Exercise List</h2>
 {% if selected_exercises %}
 {% for selected_exercise in selected_exercises %}
-    <a href="{{ url_for('exercise', exercise_id=selected_exercise['id']) }}">{{selected_exercise['name']}} </a>
+    <a href="{{ url_for('main.exercise', exercise_id=selected_exercise['id']) }}">{{selected_exercise['name']}} </a>
     <a>Sets: {{ selected_exercise['num_sets'] }}</a>
     <a>Reps: {{ selected_exercise['num_reps'] }}</a>
     <br>
@@ -35,7 +35,7 @@
     <p>No exercises have been added.</p>
 {% endif %}
 
-<form action="{{ url_for('delete_workout', id=workout['id']) }}" method="POST">
+<form action="{{ url_for('main.delete_workout', id=workout['id']) }}" method="POST">
     <input type="submit" value="Delete Workout"
            class="btn btn-danger btn-sm"
            onclick="return confirm('Are you sure you want to delete this exercise?')">
