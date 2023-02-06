@@ -14,19 +14,19 @@
             <div class = "card-img">
                 image
             </div>
-            <div> 
+            <div>
                 <h4>{{ exercise['name'] }}</h4>
-                <p>Muscle: {{ exercise['muscle'] }}</p>   
+                <p>Muscle: {{ exercise['muscle'] }}</p>
             </div>
         </a>
         <div class = "card-details">
             <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('main.edit', id=exercise['id']) }}">
                 <i class="bi bi-pencil"></i>
             </a>
-             <!-- TODO: Like button logic-->  
+             <!-- TODO: Like button logic-->
              <a type = "button"  class = "btn-sm btn-outline-danger">
                 <i class = "bi bi-heart text-danger"></i>
-            </a>   
+            </a>
         </div>
     </div>
     {% endfor %}
@@ -39,23 +39,23 @@
             <div class = "card-img">
                 image
             </div>
-            <div> 
+            <div>
                 <h4>{{ workout['name'] }}</h4>
-                <p>Author: {{ workout['author'] }}</p>   
+                <p>Author: {{ workout['author'] }}</p>
             </div>
         </a>
         <div class = "card-details">
             <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('main.edit', id=workout['id']) }}">
                 <i class="bi bi-pencil"></i>
             </a>
-            <!-- TODO: Like button logic-->  
+            <!-- TODO: Like button logic-->
             <a type = "button" class = "btn-sm btn-outline-danger">
                 <i class = "bi bi-heart text-danger"></i>
-            </a> 
-            
+            </a>
+
         </div>
     </div>
-    
+
     {% endfor %}
 </div>
 
