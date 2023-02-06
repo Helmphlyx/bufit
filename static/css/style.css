@@ -1,25 +1,65 @@
 h1 {
-    border: 2px #eee solid;
-    color: brown;
+    color: rgb(209, 24, 24);
     text-align: center;
     padding: 10px;
+    margin: 25px 0;
+    }
+.library-title {
+    text-align: left;
+    padding:0;
+    font-size: 2rem;
 }
 
-# login {
-body, html {
+.logo {
+    max-width: 90px;
+    height: auto;
+}
+.nav-item a span {
+    margin-left:8px;
+}
+.card-wrapper {
+    
+    display: flex;
+    padding: 5px;
+    width: 360px;
+    justify-content: space-between;
 
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    display:table;
 }
-body {
-    display:table-cell;
-    vertical-align:middle;
+.card-content  {
+    display: flex; 
+    color:gray;
+    margin: 10px;
 }
-form {
-    display:table;/* shrinks to fit conntent */
-    margin:auto;
+.card-content:hover  {
+    color: rgb(173, 18, 18);
+    text-decoration: none;
+    
 }
+.card-content h4 {
+    color: black;
+    font-size: 1.1rem;
+    font-weight: bold;
 }
+.card-content p {
+    font-size: 1rem;
+}
+.card-content h4:hover {
+    color: rgb(173, 18, 18);
+}
+.card-img {
+    width: 100px;
+    height: 100px;
+    border: 1px solid red;
+    margin-right: 20px;
+}
+.card-details{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.library-section-wrapper {
+    display: flex;
+    flex-direction: row; 
+    flex-wrap: wrap; 
+}
+     

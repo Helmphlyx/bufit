@@ -7,45 +7,69 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <!--CSS styles-->
+    <link rel ="stylesheet" href = "../static/css/style.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <title>{% block title %} {% endblock %}</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-light bg-light">
-    <a class="navbar-brand" href="{{ url_for('main.home')}}">BU Fit</a>
+    <a class="navbar-brand" href="{{ url_for('main.home')}}"><img src="static/img/logo.png" class = "logo" alt = "BU Fit"/></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             {% if current_user.is_authenticated %}
-            <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('main.home')}}">Home</a>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.home')}}">
+                    <i class="bi bi-house-door"></i>
+                    <span>Home</span>
+                </a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('main.search_exercises')}}">Search Exercises</a>
+            <li class="nav-item dropdown">
+                <a class="search-menu nav-link dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false" >
+                    <i class="bi bi-search"></i>
+                    <span>Search</span>
+                </a>
+                <ul class = "dropdown-menu" >
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('main.search_exercises')}}">Search Exercises</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('main.search_workouts')}}">Search Workouts</a>
+                    </li>
+                </ul> 
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('main.search_workouts')}}">Search Workouts</a>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.library')}}">
+                    <i class="bi bi-collection"></i>
+                    <span>Library</span>
+                </a>
+
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('main.library')}}">Library</a>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.create_exercise')}}">
+                    <i class="bi bi-plus-square-dotted"></i>
+                    <span>Add Exercise</span>
+                </a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('main.create_exercise')}}">Add Exercise</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('main.create_workout')}}">Create Workout</a>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.create_workout')}}">
+                    <i class="bi bi-plus-square"></i>
+                    <span>Create Workout</span>
+                </a>
             </li>
             <li class="nav-item active">
                 <a class="nav-link" href="{{ url_for('auth.logout')}}">Log Out</a>
             </li>
             {% endif %}
             {% if not current_user.is_authenticated %}
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('auth.login')}}">Log In</a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('auth.signup')}}">Sign Up</a>
             </li>
             {% endif %}
