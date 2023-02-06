@@ -9,6 +9,7 @@ h1 {
     padding:0;
     font-size: 2rem;
 }
+
 .logo {
     max-width: 90px;
     height: auto;
@@ -17,7 +18,7 @@ h1 {
     margin-left:8px;
 }
 .card-wrapper {
-    
+
     display: flex;
     padding: 5px;
     width: 360px;
@@ -25,14 +26,14 @@ h1 {
 
 }
 .card-content  {
-    display: flex; 
+    display: flex;
     color:gray;
     margin: 10px;
 }
 .card-content:hover  {
     color: rgb(173, 18, 18);
     text-decoration: none;
-    
+
 }
 .card-content h4 {
     color: black;
@@ -58,9 +59,7 @@ h1 {
 }
 .library-section-wrapper {
     display: flex;
-    flex-direction: row; 
-    flex-wrap: wrap; 
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
-        
-     

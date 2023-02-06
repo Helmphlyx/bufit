@@ -15,14 +15,15 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-light bg-light">
-    <a class="navbar-brand" href="{{ url_for('home')}}"><img src="static/img/logo.png" class = "logo" alt = "BU Fit"/></a>
+    <a class="navbar-brand" href="{{ url_for('main.home')}}"><img src="static/img/logo.png" class = "logo" alt = "BU Fit"/></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
+            {% if current_user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('home')}}">
+                <a class="nav-link" href="{{ url_for('main.home')}}">
                     <i class="bi bi-house-door"></i>
                     <span>Home</span>
                 </a>
@@ -34,32 +35,44 @@
                 </a>
                 <ul class = "dropdown-menu" >
                     <li>
-                        <a class="dropdown-item" href="{{ url_for('search_exercises')}}">Search Exercises</a>
+                        <a class="dropdown-item" href="{{ url_for('main.search_exercises')}}">Search Exercises</a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="{{ url_for('search_workouts')}}">Search Workouts</a>
+                        <a class="dropdown-item" href="{{ url_for('main.search_workouts')}}">Search Workouts</a>
                     </li>
-                </ul> 
+                </ul>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('library')}}">
+                <a class="nav-link" href="{{ url_for('main.library')}}">
                     <i class="bi bi-collection"></i>
                     <span>Library</span>
                 </a>
 
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('create_exercise')}}">
+                <a class="nav-link" href="{{ url_for('main.create_exercise')}}">
                     <i class="bi bi-plus-square-dotted"></i>
                     <span>Add Exercise</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('create_workout')}}">
+                <a class="nav-link" href="{{ url_for('main.create_workout')}}">
                     <i class="bi bi-plus-square"></i>
                     <span>Create Workout</span>
                 </a>
             </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('auth.logout')}}">Log Out</a>
+            </li>
+            {% endif %}
+            {% if not current_user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('auth.login')}}">Log In</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('auth.signup')}}">Sign Up</a>
+            </li>
+            {% endif %}
         </ul>
     </div>
 </nav>

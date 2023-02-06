@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<body>
+<style>
+body{
+    background-image: url("/static/images/signup.gif");
+    background-size: cover;
+
+    height: 100vh;
+    padding:0;
+    margin:0;
+}
+</style>
+<div style="background:white;text-align:center;border:1px solid black;" class="form-group4">
+    <h1>Sign Up</h1>
+    <div class="form-group">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div>
+                {{ messages[0] }}. Go to <a href="{{ url_for('auth.login') }}">login page</a>.
+            </div>
+        {% endif %}
+        {% endwith %}
+        <form method="POST" action="/signup">
+            <div class="form-group">
+                <div class="control">
+                    <input type="email" name="email" placeholder="Email" autofocus="">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="control">
+                    <input type="text" name="name" placeholder="Username" autofocus="">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="control">
+                    <input type="password" name="password" placeholder="Password">
+                </div>
+            </div>
+
+            <button class="btn btn-primary">Sign Up</button>
+        </form>
+    </div>
+</div>
+</body>
+{% endblock %}

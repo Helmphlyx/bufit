@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('main.static', filename= 'css/style.css') }}">
     <title>BUFit</title>
 </head>
 {% block content %}
@@ -10,23 +10,23 @@
 <div class="library-section-wrapper">
     {% for exercise in exercises %}
     <div class= "card-wrapper">
-        <a class = "card-content" href="{{ url_for('exercise', exercise_id=exercise['id']) }}">
+        <a class = "card-content" href="{{ url_for('main.exercise', exercise_id=exercise['id']) }}">
             <div class = "card-img">
                 image
             </div>
-            <div> 
+            <div>
                 <h4>{{ exercise['name'] }}</h4>
-                <p>Muscle: {{ exercise['muscle'] }}</p>   
+                <p>Muscle: {{ exercise['muscle'] }}</p>
             </div>
         </a>
         <div class = "card-details">
-            <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('edit', id=exercise['id']) }}">
+            <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('main.edit', id=exercise['id']) }}">
                 <i class="bi bi-pencil"></i>
             </a>
-             <!-- TODO: Like button logic-->  
+             <!-- TODO: Like button logic-->
              <a type = "button"  class = "btn-sm btn-outline-danger">
                 <i class = "bi bi-heart text-danger"></i>
-            </a>   
+            </a>
         </div>
     </div>
     {% endfor %}
@@ -35,29 +35,28 @@
 <div class="library-section-wrapper">
     {% for workout in workouts %}
     <div class= "card-wrapper">
-        <a class = "card-content" href="{{ url_for('workout', workout_id=workout['id']) }}">
+        <a class = "card-content" href="{{ url_for('main.workout', workout_id=workout['id']) }}">
             <div class = "card-img">
                 image
             </div>
-            <div> 
+            <div>
                 <h4>{{ workout['name'] }}</h4>
-                <p>Author: {{ workout['author'] }}</p>   
+                <p>Author: {{ workout['author'] }}</p>
             </div>
         </a>
         <div class = "card-details">
-            <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('edit', id=workout['id']) }}">
+            <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('main.edit', id=workout['id']) }}">
                 <i class="bi bi-pencil"></i>
             </a>
-            <!-- TODO: Like button logic-->  
+            <!-- TODO: Like button logic-->
             <a type = "button" class = "btn-sm btn-outline-danger">
                 <i class = "bi bi-heart text-danger"></i>
-            </a> 
-            
+            </a>
+
         </div>
     </div>
-    
+
     {% endfor %}
 </div>
-
 
 {% endblock %}
