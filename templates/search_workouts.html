@@ -6,7 +6,9 @@
     <title>BUFit</title>
 </head>
 {% block content %}
-<h1>{% block title %} Workouts {% endblock %}</h1>
+<div class="page-title search-workouts-bg">
+    <h1 class="display-3 text-light">{% block title %} Search Workouts {% endblock %}</h1>
+</div>
 <div class="cards-wrapper">
     {% for workout in workouts %}
     <div class= "card-wrapper">
