@@ -38,7 +38,21 @@ h1 {
     padding:0;
     font-size: 2rem;
 }
-
+.auth-box {
+    background-color: rgba(255, 255, 255, 0.841);
+    box-shadow: 3px 3px 3px  #888888;
+    border-radius: 10px;
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.auth-box h1 {
+    color: black;
+}
 .logo {
     max-width: 90px;
     height: auto;
