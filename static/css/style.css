@@ -62,8 +62,17 @@ h1 {
     flex-direction: row;
     flex-wrap: wrap;
 }
-.divider {
-    padding-right: 1rem;
-    padding-left:1rem;
+.right-nav-item {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem ;
 }
+@media  screen and (min-width:768px) {
+    .right-nav-item {
+        padding-top: 0;
+        padding-bottom: 0 ;
+        padding-right: 0.5rem;
+        padding-left:0.5rem;  
+    }
+}
+
 
