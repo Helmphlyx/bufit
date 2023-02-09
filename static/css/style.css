@@ -6,16 +6,24 @@ h1 {
     }
     
 .page-title {
-    border: 1px solid blue;
-}
-.search-exercises-title {
-    background-image: url("../img/victor-freitas-WvDYdXDzkhs-unsplash.jpg");
-    /* background-image: linear-gradient(to top, #030202, rgba(0,0,0,0), url("../img/victor-freitas-WvDYdXDzkhs-unsplash.jpg")); */
     background-repeat: no-repeat;
     background-size: cover;
     padding:0;
     margin:0;
     height: 400px;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 3px 3px 3px  #888888;
+}
+.search-exercises-title {
+    /* background-image: url("../img/victor-freitas-WvDYdXDzkhs-unsplash.jpg"); */
+    background-image: linear-gradient(45deg,
+    rgba(245,70,66, 0.75),
+    rgba(8,83,156, 0.75)), url(
+        "../img/victor-freitas-WvDYdXDzkhs-unsplash.jpg");
 }
 .library-title {
     text-align: left;
