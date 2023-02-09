@@ -8,6 +8,9 @@
 {% block content %}
 <h1 class = "library-title">{% block title %} Your liked Exercises {% endblock %}</h1>
 <div class="cards-section-wrapper">
+    {% if not exercises %}
+    <p> You haven't liked any exercises yet.</p>
+    {% endif%}
     {% for exercise in exercises %}
     <div class= "card-wrapper">
         <a class = "card-content" href="{{ url_for('main.exercise', exercise_id=exercise['id']) }}">
@@ -33,6 +36,9 @@
 </div>
 <h1 class = "library-title">Your liked Workouts</h1>
 <div class="cards-section-wrapper">
+    {% if not workouts %}
+    <p> You haven't liked any workouts yet.</p>
+    {% endif%}
     {% for workout in workouts %}
     <div class= "card-wrapper">
         <a class = "card-content" href="{{ url_for('main.workout', workout_id=workout['id']) }}">
