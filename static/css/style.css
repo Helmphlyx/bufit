@@ -1,8 +1,10 @@
 h1 {
-    color: rgb(209, 24, 24);
+    color: rgb(231, 225, 225);
     text-align: center;
     padding: 10px;
     margin: 25px 0;
+    border-bottom: 3px solid rgb(198, 11, 11);
+    
     }
     
 .page-title {
@@ -10,6 +12,7 @@ h1 {
     background-size: cover;
     padding:0;
     margin:0;
+    margin-bottom: 30px;
     height: 400px;
     width: 100vw;
     margin-left: calc(50% - 50vw);
@@ -21,8 +24,8 @@ h1 {
 .search-exercises-title {
     /* background-image: url("../img/victor-freitas-WvDYdXDzkhs-unsplash.jpg"); */
     background-image: linear-gradient(45deg,
-    rgba(245,70,66, 0.75),
-    rgba(8,83,156, 0.75)), url(
+    rgba(245, 69, 66, 0.547),
+    rgba(8, 82, 156, 0.506)), url(
         "../img/victor-freitas-WvDYdXDzkhs-unsplash.jpg");
 }
 .library-title {
