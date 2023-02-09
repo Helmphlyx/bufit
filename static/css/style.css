@@ -4,6 +4,19 @@ h1 {
     padding: 10px;
     margin: 25px 0;
     }
+    
+.page-title {
+    border: 1px solid blue;
+}
+.search-exercises-title {
+    background-image: url("../img/victor-freitas-WvDYdXDzkhs-unsplash.jpg");
+    /* background-image: linear-gradient(to top, #030202, rgba(0,0,0,0), url("../img/victor-freitas-WvDYdXDzkhs-unsplash.jpg")); */
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding:0;
+    margin:0;
+    height: 400px;
+}
 .library-title {
     text-align: left;
     padding:0;
@@ -19,10 +32,13 @@ h1 {
 }
 .card-wrapper {
 
+    background-color: rgba(251, 239, 239, 0.49);
+    border-radius: 10px;
     display: flex;
     padding: 5px;
     width: 360px;
     justify-content: space-between;
+    margin: 15px;
 
 }
 .card-content  {
@@ -57,7 +73,7 @@ h1 {
     flex-direction: column;
     align-items: flex-end;
 }
-.library-section-wrapper {
+.cards-section-wrapper {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
