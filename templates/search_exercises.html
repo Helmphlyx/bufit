@@ -11,21 +11,19 @@
 </div>
 
 
-<h2>Target Muscle</h2>
-<form class="form-inline" method="POST" action="{{ url_for('main.search_exercises') }}">
-    <div class="form-group">
-        <select name=muscle class="form-control">
+<form class="form-inline"  method="POST" action="{{ url_for('main.search_exercises') }}">
+    <label class = "form-label mx-3" for="muscle">Filter by muscle:</label>
+    <div class="input-group">
+        <select class="form-select" id = "muscle" name= "muscle" aria-describedby="selectMuscleBtn">
             {% for muscle in muscles %}
             <option value="{{muscle}}" SELECTED>{{muscle}}</option>"
             {% endfor %}
         </select>
-    </div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Filter</button>
+        <button class="btn btn-outline-primary btn-sm" type="submit" id="selectMuscleBtn">Filter</button>
     </div>
 </form>
 
-<h2 class="display-4">Exercises</h2>
+
 <div class="cards-section-wrapper">
     {% for exercise in exercises %}
     <div class= "card-wrapper">
