@@ -1,3 +1,4 @@
+
 h1 {
     color: rgb(231, 225, 225);
     text-align: center;
@@ -119,6 +120,23 @@ h1 {
         padding-right: 0.5rem;
         padding-left:0.5rem;  
     }
+}
+.footer {
+    background-color: rgb(66, 64, 64);
+    color: white;
+    padding: 30px 20px;
+    min-height: 50px;
+    display: flex;
+    justify-content: space-between;
+    /* position: fixed;
+    left: 0;
+    bottom: 0; */
+    width: 100%;
+    margin-top: auto;
+    
+}
+.footer ul {
+    list-style-type: none;
 }
 
 
