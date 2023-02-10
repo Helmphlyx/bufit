@@ -62,10 +62,50 @@ h1 {
     display: flex;
     flex-direction: column;
 }
+.detail-info {
+    background-color: rgba(30, 30, 30, 0.887);
+    padding: 20px;
+}
+.detail-info h2, .detail-info a {
+    color: #dc3545;
+}
+.detail-info-header {
+    display: flex;
+    justify-content: space-between;
+}
+.detail-info-body {
+    color: white;
+}
+.muscle-info {
+    border-bottom: 1px solid #dc3545;
+    margin-top: 15px;
+    padding-bottom: 5px;
+    color: #888888;
+    margin-bottom: 30px;
+    font-size: 1.2rem;
+
+}
+.detail-wrapper {
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    margin: 50px 0;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+@media  screen and (min-width:768px) {
+    .detail-wrapper {
+         flex-direction: row;
+    }
+    .detail-img {
+        max-width: 50%;
+    }
+}
 .logo {
     max-width: 90px;
     height: auto;
 }
+
 .nav-item a span {
     margin-left:8px;
 }
