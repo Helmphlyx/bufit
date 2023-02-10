@@ -9,7 +9,10 @@
 <div class="page-title search-workouts-bg">
     <h1 class="display-3 text-light">{% block title %} Search Workouts {% endblock %}</h1>
 </div>
-<div class="cards-wrapper">
+<div class="cards-section-wrapper">
+    {% if not workouts%}
+    <p class = "mx-auto">There are no workouts.</p>
+    {% endif%}
     {% for workout in workouts %}
     <div class= "card-wrapper">
         <a class = "card-content" href="{{ url_for('main.workout', workout_id=workout['id']) }}">
