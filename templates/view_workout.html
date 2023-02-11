@@ -3,9 +3,12 @@
 {% block content %}
 <h2>{% block name %} {{ workout['name'] }} {% endblock %}</h2>
 <span class="badge badge-primary">{{ workout['created'] }}</span>
-<span class="badge badge-primary">{{ author }}</span>
+<span class="badge badge-primary">{{ workout['user_id'] }}</span>
+<span class="badge badge-primary">Edit Title</span>
 
+<h3>Description</h3>
 <p>{{ workout['description'] }}</p>
+<button class="btn btn-primary">Edit Description</button>
 
 <h2>Exercise List</h2>
 {% if selected_exercises %}
@@ -18,6 +21,7 @@
 {% else %}
     <p>No exercises have been added.</p>
 {% endif %}
+<button class="btn btn-primary">Edit Exercises</button>
 
 <form method="post">
     <div class="form-group">

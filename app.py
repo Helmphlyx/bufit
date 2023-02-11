@@ -3,14 +3,14 @@ from flask_login import LoginManager
 from models import User
 from database import db, init_db
 
-DATABASE_NAME = "database.db"
 global_user = None
 
 
 def create_app():
     app = Flask(__name__)
     app.config["SECRET_KEY"] = "SOME_SECRET_KEY_VALUE"
-    app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DATABASE_NAME}"
+    app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///database.db"
+    app.config["UPLOAD_FOLDER"] = "static/images/"
     app.url_map.strict_slashes = False
 
     db.init_app(app)
@@ -24,9 +24,12 @@ def create_app():
 
     app.register_blueprint(main_blueprint)
 
+    from models import User
+
     with app.app_context():
         db.create_all()
-        init_db()
+        db.session.commit()
+        # init_db()
 
     return app
 

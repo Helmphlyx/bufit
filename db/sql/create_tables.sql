@@ -3,12 +3,14 @@ DROP TABLE IF EXISTS workouts;
 DROP TABLE IF EXISTS workout_exercises;
 DROP TABLE IF EXISTS exercise_likes;
 DROP TABLE IF EXISTS workout_likes;
+DROP TABLE IF EXISTS muscles;
 
 CREATE TABLE exercises (
    id INTEGER PRIMARY KEY AUTOINCREMENT,
-   name TEXT NOT NULL UNIQUE,
-   muscle TEXT NOT NULL,
+   name TEXT NOT NULL,
+   muscle INTEGER NOT NULL DEFAULT 0,
    description TEXT NOT NULL,
+   image_url TEXT DEFAULT "",
    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -25,7 +27,9 @@ CREATE TABLE workout_exercises (
     WorkoutID INTEGER NOT NULL,
     ExercisesID INTEGER NOT NULL,
     num_sets INTEGER NOT NULL DEFAULT 0,
-    num_reps INTEGER NOT NULL DEFAULT 0
+    num_reps INTEGER NOT NULL DEFAULT 0,
+    num_rest INTEGER NOT NULL DEFAULT 0,
+    notes TEXT NOT NULL DEFAULT ''
 );
 
 CREATE TABLE exercise_likes (
@@ -42,9 +46,8 @@ CREATE TABLE workout_likes (
    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
---CREATE TABLE users (
---   id INTEGER PRIMARY KEY AUTOINCREMENT,
---   email TEXT NOT NULL UNIQUE,
---   password TEXT NOT NULL,
---   name TEXT NOT NULL
---);
+CREATE TABLE muscles (
+   id INTEGER PRIMARY KEY AUTOINCREMENT,
+   muscle TEXT NOT NULL UNIQUE,
+   muscle_latin TEXT NOT NULL DEFAULT ''
+);

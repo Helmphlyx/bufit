@@ -11,9 +11,9 @@
 <a href="{{ url_for('main.workout', workout_id=workout['id']) }}">
     <h2>{{ workout['name'] }}</h2>
 </a>
-<p>{{ workout['author'] }}</p>
-<p>{{ workout['exercises'] }}</p>
-<span class="badge badge-primary">{{ workout['created'] }}</span>
+<p>{{ workout['description'] }}</p>
+<span class="badge badge-primary">Created: {{ workout['created'] }}</span>
+<span class="badge badge-primary">Author: {{ workout['author'] }}</span>
 <a href="{{ url_for('main.edit_workout', workout_id=workout['id']) }}">
     <span class="badge badge-warning">Edit</span>
 </a>
