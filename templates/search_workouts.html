@@ -6,17 +6,38 @@
     <title>BUFit</title>
 </head>
 {% block content %}
-<h1>{% block title %} Workouts {% endblock %}</h1>
-{% for workout in workouts %}
-<a href="{{ url_for('main.workout', workout_id=workout['id']) }}">
-    <h2>{{ workout['name'] }}</h2>
-</a>
-<p>{{ workout['description'] }}</p>
-<span class="badge badge-primary">Created: {{ workout['created'] }}</span>
-<span class="badge badge-primary">Author: {{ workout['author'] }}</span>
-<a href="{{ url_for('main.edit_workout', workout_id=workout['id']) }}">
-    <span class="badge badge-warning">Edit</span>
-</a>
-<hr>
-{% endfor %}
+
+<div class="page-title search-workouts-bg">
+    <h1 class="display-3 text-light">{% block title %} Search Workouts {% endblock %}</h1>
+</div>
+<div class="cards-section-wrapper">
+    {% if not workouts%}
+    <p class = "mx-auto">There are no workouts.</p>
+    {% endif%}
+    {% for workout in workouts %}
+    <div class= "card-wrapper">
+        <a class = "card-content" href="{{ url_for('main.workout', workout_id=workout['id']) }}">
+            <div class = "card-img">
+                image
+            </div>
+            <div>
+                <h4>{{ workout['name'] }}</h4>
+                <p>Author: {{ workout['author'] }}</p>
+            </div>
+        </a>
+        <div class = "card-details">
+            <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('main.edit_workout', workout_id=workout['id']) }}">
+                <i class="bi bi-pencil"></i>
+            </a>
+            <!-- TODO: Like button logic-->
+            <a type = "button" class = "btn-sm btn-outline-danger">
+                <i class = "bi bi-heart text-danger"></i>
+            </a>
+
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+
 {% endblock %}

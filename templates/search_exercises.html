@@ -6,33 +6,46 @@
     <title>BUFit</title>
 </head>
 {% block content %}
-<h1>{% block title %} Search Exercises {% endblock %}</h1>
+<div class="page-title search-exercises-bg">
+    <h1 class="display-3 text-light">{% block title %}Search Exercises{% endblock %}</h1>
+</div>
 
-<h2>Target Muscle</h2>
-<form class="form-inline" method="POST" action="{{ url_for('main.search_exercises') }}">
-    <div class="form-group">
-        <select name=muscle class="form-control">
+
+<form class="form-inline"  method="POST" action="{{ url_for('main.search_exercises') }}">
+    <label class = "form-label mx-3" for="muscle">Filter by muscle:</label>
+    <div class="input-group">
+        <select class="form-select" id = "muscle" name= "muscle" aria-describedby="selectMuscleBtn">
             {% for muscle in muscles %}
             <option value="{{muscle}}" SELECTED>{{muscle}}</option>"
             {% endfor %}
         </select>
-    </div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Filter</button>
+        <button class="btn btn-outline-primary btn-sm" type="submit" id="selectMuscleBtn">Filter</button>
     </div>
 </form>
 
-<h2>Exercises</h2>
-{% for exercise in exercises %}
-<a href="{{ url_for('main.exercise', exercise_id=exercise['id']) }}">
-    <h3>{{ exercise['name'] }}</h3>
-</a>
-<p>{{ exercise['muscle'] }}</p>
-<p>{{ exercise['description'] }}</p>
-<span class="badge badge-primary">{{ exercise['created'] }}</span>
-<a href="{{ url_for('main.edit', id=exercise['id']) }}">
-    <span class="badge badge-warning">Edit</span>
-</a>
-<hr>
-{% endfor %}
+
+<div class="cards-section-wrapper">
+    {% for exercise in exercises %}
+    <div class= "card-wrapper">
+        <a class = "card-content" href="{{ url_for('main.exercise', exercise_id=exercise['id']) }}">
+            <div class = "card-img">
+                image
+            </div>
+            <div>
+                <h4>{{ exercise['name'] }}</h4>
+                <p>Muscle: {{ exercise['muscle'] }}</p>
+            </div>
+        </a>
+        <div class = "card-details">
+            <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('main.edit', id=exercise['id']) }}">
+                <i class="bi bi-pencil"></i>
+            </a>
+             <!-- TODO: Like button logic-->
+             <a type = "button"  class = "btn-sm btn-outline-danger">
+                <i class = "bi bi-heart text-danger"></i>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}

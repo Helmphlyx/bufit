@@ -1,38 +1,55 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{% block title %} Add a New Exercise  {% endblock %}</h1>
+<body>
+    <style>
+    body{
+        background-image: linear-gradient(45deg,
+        rgba(245, 69, 66, 0.408),
+        rgba(8, 82, 156, 0.341)), url("../static/img/create-exercise-img.jpg");
+        background-size: cover;
+        padding:0;
+        margin:0;
+    }
+    </style>
 
-<form method="post" enctype = "multipart/form-data">
-    <div class="form-group">
-        <label for='name'>Name</label>
-        <input type="text" name="name"
-               placeholder="Exercise Name" class="form-control"
-               value="{{ request.form['name'] }}"></input>
-    </div>
+    <div class="create-box">
+        <h1>{% block title %} Add a New Exercise  {% endblock %}</h1>
 
-    <div class="form-group">
-        <label for="muscle">Target Muscle</label>
-        <select name=muscle class="form-control">
-            {% for muscle in muscles %}
-            <option value="{{muscle}}" SELECTED>{{muscle}}</option>"
-            {% endfor %}
-        </select>
-    </div>
+        <form method="post" enctype = "multipart/form-data">
+            <div class="form-group">
+                <label for='name'>Name</label>
+                <input type="text" name="name"
+                    placeholder="Exercise Name" class="form-control"
+                    value="{{ request.form['name'] }}"></input>
+            </div>
+    
+             <div class="form-group">
+                <label for="muscle">Target Muscle</label>
+                <select name=muscle class="form-control">
+                    {% for muscle in muscles %}
+                    <option value="{{muscle}}" SELECTED>{{muscle}}</option>"
+                    {% endfor %}
+                </select>
+            </div>
 
-    <div class="form-group">
-        <label for='description'>Description</label>
-        <textarea name="description" placeholder="Description of Exercise"
-                  class="form-control">{{ request.form['description'] }}</textarea>
-    </div>
+            <div class="form-group">
+                <label for='description'>Description</label>
+                <textarea name="description" placeholder="Description of Exercise"
+                        class="form-control">{{ request.form['description'] }}</textarea>
+            </div>
 
-    <div class="form-group">
-        <label for='image'>Image</label>
-        <input type = "file" name = "image" />
-    </div>
+            <div class="form-group">
+                <label for='image'>Image</label>
+                <input type = "file" name = "image" />
+            </div>
 
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="form-group d-flex justify-content-end">
+                <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+        </form>
     </div>
-</form>
+    
+</body>
+
 {% endblock %}

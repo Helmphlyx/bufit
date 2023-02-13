@@ -6,13 +6,11 @@
 body{
     background-image: url("/static/images/signup.gif");
     background-size: cover;
-
-    height: 100vh;
     padding:0;
     margin:0;
 }
 </style>
-<div style="background:white;text-align:center;border:1px solid black;" class="form-group4">
+<div class="auth-box">
     <h1>Sign Up</h1>
     <div class="form-group">
         {% with messages = get_flashed_messages() %}
@@ -25,23 +23,25 @@ body{
         <form method="POST" action="/signup">
             <div class="form-group">
                 <div class="control">
-                    <input type="email" name="email" placeholder="Email" autofocus="">
+                    <input class="form-control" type="email" name="email" placeholder="Email" autofocus="">
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="control">
-                    <input type="text" name="name" placeholder="Username" autofocus="">
+                    <input class="form-control" type="text" name="name" placeholder="Username" autofocus="">
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="control">
-                    <input type="password" name="password" placeholder="Password">
+                    <input class="form-control" type="password" name="password" placeholder="Password">
                 </div>
             </div>
+            <div class="d-grid">
+                <button class="btn btn-danger btn-block">Sign Up</button>
 
-            <button class="btn btn-primary">Sign Up</button>
+            </div>
         </form>
     </div>
 </div>
