@@ -1,14 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>{% block name %} {{ exercise['name'] }} {% endblock %}</h2>
-<span class="badge badge-primary">{{ exercise['created'] }}</span>
-<p>{{ exercise['muscle'] }}</p>
-<p>{{ exercise['description'] }}</p>
-
-<form method="post">
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Like</button>
+<div class="detail-wrapper">
+    <div class="detail-img">
+        <!-- TODO: EXERCISE IMAGE -->
+        <!-- <img src="{{exercise['img']}}" class = "img-fluid" alt = "{{exercise['name']}}"/> -->
+        <img src="../static/img/example-exercise-img.jpg" class = "img-fluid" alt = "{{exercise['name']}}"/>
     </div>
-</form>
+    <div class="detail-info">
+        <div class="detail-info-header">
+            <h2>{% block name %} {{ exercise['name'] }} {% endblock %}</h2>
+            <form method="post">
+                <!-- TODO UNLIKE LOGIC -->
+                <button type = "button"  class = "btn btn-lg btn-danger">
+                    <i class = "bi bi-heart"></i>
+                </button>
+            </form>
+        </div>
+        <div class="detail-info-body">
+            <p class="muscle-info">Muscle: {{ exercise['muscle'] }}</p>
+            <p>{{ exercise['description'] }}</p>
+        </div>
+        
+        
+    </div>
+    
+</div>
+
 {% endblock %}
