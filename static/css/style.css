@@ -27,13 +27,13 @@ h1 {
     background-image: linear-gradient(45deg,
     rgba(245, 69, 66, 0.547),
     rgba(8, 82, 156, 0.506)), url(
-        "../img/victor-freitas-WvDYdXDzkhs-unsplash.jpg");
+        "../img/search-exercises-img.jpg");
 }
 .search-workouts-bg {
     background-image: linear-gradient(45deg,
     rgba(245, 69, 66, 0.547),
     rgba(8, 82, 156, 0.506)), url(
-        "../img/sven-mieke-jO6vBWX9h9Y-unsplash.jpg");
+        "../img/search-workouts-img.jpg");
 }
 .library-title {
     text-align: left;
