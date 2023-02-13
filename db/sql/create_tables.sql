@@ -29,7 +29,8 @@ CREATE TABLE workout_exercises (
     num_sets INTEGER NOT NULL DEFAULT 0,
     num_reps INTEGER NOT NULL DEFAULT 0,
     num_rest INTEGER NOT NULL DEFAULT 0,
-    notes TEXT NOT NULL DEFAULT ''
+    notes TEXT NOT NULL DEFAULT '',
+    exercise_order INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE exercise_likes (

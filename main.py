@@ -50,7 +50,8 @@ def get_exercises_for_workout(workout_id: int):
     selected_exercises_artifact = db_utils.execute(
         "SELECT a.id, a.name, a.muscle, b.num_sets, b.num_reps, b.num_rest,"
         " b.id AS WorkoutExerciseID FROM workout_exercises b JOIN exercises a"
-        f" ON a.id = b.ExercisesID AND b.WorkoutID = {workout_id}",
+        f" ON a.id = b.ExercisesID AND b.WorkoutID = {workout_id} ORDER BY"
+        " b.exercise_order",
         fetch_all=True,
     )
 
@@ -161,13 +162,14 @@ def edit_workout(workout_id):
         num_reps = request.form.get("num_reps", 0)
         num_rest = request.form.get("num_rest", 0)
         notes = request.form.get("notes", 0)
+        workout_order = len(selected_workout)
 
         if exercise_id:
             db_utils.execute(
                 "INSERT INTO workout_exercises (WorkoutID, ExercisesID,"
-                f" num_sets, num_reps, num_rest, notes) VALUES({workout_id},"
-                f" {exercise_id}, {num_sets}, {num_reps}, {num_rest},"
-                f" '{notes}')",
+                " num_sets, num_reps, num_rest, notes, exercise_order)"
+                f" VALUES({workout_id}, {exercise_id}, {num_sets}, {num_reps},"
+                f" {num_rest},  '{notes}', {workout_order})",
                 commit=True,
             )
 
@@ -307,9 +309,58 @@ def workout(workout_id):
 @main.route("/update_workout_order_", methods=["POST"])
 def update_workout_order():
     """Handles updating workout order."""
-    print(request.form.get("order_data"))
+    order_data = request.form.get("order_data").split(",")
+    order_update_case = [
+        f"WHEN {order_index} THEN {order_data.index(order_index)}"
+        for order_index in order_data
+    ]
 
-    return redirect(url_for("main.edit_workout", workout_id="1"))
+    db_utils = SqliteUtilites(DATABASE_NAME)
+    db_utils.execute(
+        f"""
+        UPDATE workout_exercises
+            SET exercise_order = CASE id
+                                {' '.join(case for case in order_update_case)}
+                                ELSE 0
+                                END
+        WHERE id IN({','.join(index for index in order_data)});
+        """,
+        commit=True,
+    )
+
+    workout_id = db_utils.execute(
+        f"""
+        SELECT WorkoutID FROM workout_exercises WHERE id = {order_data[0]}
+        """
+    )[0]
+
+    workout_artifact = get_workout(workout_id)
+    selected_exercises = get_exercises_for_workout(workout_id)
+    author = User.query.filter(User.id == workout_artifact["user_id"]).first()
+
+    return render_template(
+        "edit_workout_order.html",
+        workout=workout_artifact,
+        selected_exercises=selected_exercises,
+        author=author,
+    )
+
+
+@main.route("/<int:workout_id>/edit_workout_order", methods=("GET", "POST"))
+@login_required
+def edit_workout_order(workout_id):
+    """Editing workout order page."""
+    workout_artifact = get_workout(workout_id)
+
+    selected_exercises = get_exercises_for_workout(workout_id)
+
+    author = User.query.filter(User.id == workout_artifact["user_id"]).first()
+    return render_template(
+        "edit_workout_order.html",
+        workout=workout_artifact,
+        selected_exercises=selected_exercises,
+        author=author.name,
+    )
 
 
 @main.route("/<int:workout_id>/edit_workout_title", methods=("GET", "POST"))

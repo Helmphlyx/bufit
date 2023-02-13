@@ -1,20 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{% block title %} Workout: {{ workout['name'] }} {% endblock %}</h1>
+<h1>{% block title %} Workout: {{ author }} {% endblock %}</h1>
 <h5>{{ workout['author'] }}</h5>
 
-<h2>Details</h2>
+<h2>Title</h2>
 <a href="{{ url_for('main.edit_workout_title', workout_id=workout['id']) }}">
     <span class="badge badge-warning">Edit Title</span>
 </a>
+<p>{{ workout['name'] }}</p>
 
-<p>{{ workout['description'] }}</p>
+<h2>Description</h2>
 <a href="{{ url_for('main.edit_workout_description', workout_id=workout['id']) }}">
     <span class="badge badge-warning">Edit Description</span>
 </a>
+<p>{{ workout['description'] }}</p>
 
 <h2>Exercise List</h2>
+<a href="{{ url_for('main.edit_workout_order', workout_id=workout['id']) }}">
+    <span class="badge badge-warning">Edit Order</span>
+</a>
 {% if selected_exercises %}
 {% for exercise in selected_exercises %}
 <a href="{{ url_for('main.exercise', exercise_id=exercise['id']) }}">
@@ -38,6 +43,7 @@
 {% else %}
     <p>No exercises have been added.</p>
 {% endif %}
+
 
 <h2>Add Exercises</h2>
 

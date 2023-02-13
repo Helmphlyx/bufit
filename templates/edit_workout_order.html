@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content  %}
+    <body>
+        <h1>{% block title %} Edit Workout Order for - {{ workout['author'] }}'s {{ workout['name'] }} {% endblock %}</h1>
+
+        <form method="post">
+        <h2>Exercise List</h2>
+        {% if selected_exercises %}
+        <ul id="sortable">
+        {% for selected_exercise in selected_exercises %}
+            <li id="{{ selected_exercise.WorkoutExerciseID }}" class="ui-state-default">
+                <a href="{{ url_for('main.exercise', exercise_id=selected_exercise['id']) }}">{{selected_exercise['name']}} </a>
+                <a>Sets: {{ selected_exercise['num_sets'] }}</a>
+                <a>Reps: {{ selected_exercise['num_reps'] }}</a>
+            </li>
+        {% endfor %}
+        </ul>
+        {% else %}
+        <p>No exercises have been added.</p>
+        {% endif %}
+
+        <a href="{{ url_for('main.edit_workout', workout_id=workout['id']) }}">
+            <span class="badge badge-warning">Continue Editing Workout</span>
+        </a>
+        </form>
+
+    </body>
+{% endblock %}
