@@ -10,6 +10,7 @@ db = SQLAlchemy()
 
 
 def init_db():
+    """Initialize database tables and initial values."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute_from_file("db/sql/create_tables.sql")
     init_muscle_table()
@@ -17,6 +18,7 @@ def init_db():
 
 
 def init_muscle_table():
+    """Initialize our muscle categories using external API."""
     muscles_url = "https://wger.de/api/v2/muscle/"
     response = requests.get(muscles_url)
     muscles_data = response.json().get("results", [{}])
@@ -31,18 +33,19 @@ def init_muscle_table():
 
 
 def init_exercise_table():
-    # Set up images for exercises
+    """Initialize our exercise tables using external API."""
     image_url = "https://wger.de/api/v2/exerciseimage/?is_main=true&exercise=3"
     image_url_response = requests.get(image_url)
     exercises_image_data = image_url_response.json().get("results", [{}])
 
+    # Set up exercise images
     image_dict = {}
     default_image = "static/images/coming_soon.jpg"
     for exercise_image_data in exercises_image_data:
         exercise_base = exercise_image_data.get("exercise_base")
-
         exercise_image = exercise_image_data.get("image", default_image)
         image_dict[exercise_base] = exercise_image
+
     # Set up exercises
     exercises_url = "https://wger.de/api/v2/exercise/?limit=1000&status=2&language=2&muscles="
     exercises_url_response = requests.get(exercises_url)
@@ -71,5 +74,6 @@ def init_exercise_table():
 
 
 def sanitizer(value: str):
+    """Remove HTML tags in given value."""
     regex_pattern = re.compile("<.*?>")
     return re.sub(regex_pattern, "", value).replace('"', "'")

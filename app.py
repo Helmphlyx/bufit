@@ -2,14 +2,21 @@ from flask import Flask
 from flask_login import LoginManager
 from models import User
 from database import db, init_db
+from sqlalchemy_utils import database_exists
+from settings import settings
 
 global_user = None
 
 
 def create_app():
+    """Configurations for our Flask web-app."""
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{settings.DATABASE_SHORT_NAME}"
+
     app = Flask(__name__)
-    app.config["SECRET_KEY"] = "SOME_SECRET_KEY_VALUE"
-    app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///database.db"
+    app.config[
+        "SECRET_KEY"
+    ] = "SOME_SECRET_KEY_VALUE"  # TODO: update secret value
+    app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
     app.config["UPLOAD_FOLDER"] = "static/images/"
     app.url_map.strict_slashes = False
 
@@ -27,10 +34,9 @@ def create_app():
     from models import User
 
     with app.app_context():
-        db.create_all()
-        db.session.commit()
-        # init_db()
-
+        if not database_exists(SQLALCHEMY_DATABASE_URI):
+            db.create_all()
+            init_db()
     return app
 
 
@@ -40,4 +46,5 @@ login_manager = LoginManager(app)
 
 @login_manager.user_loader
 def load_user(user_id):
+    """Defines function to load users."""
     return User.query.get(int(user_id))

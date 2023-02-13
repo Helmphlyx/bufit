@@ -11,12 +11,14 @@ from models import User
 
 from settings import settings
 
+DEFAULT_EXERCISE_IMAGE_PATH = "static/images/coming_soon.jpg"
 DATABASE_NAME = settings.DATABASE_NAME
 main = Blueprint("main", __name__)
 
 
 # Generic DB Queries
 def get_exercise(exercise_id: int):
+    """Get exercise by ID."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     exercise_artifact = db_utils.execute(
         "SELECT e.id, e.name, e.description, e.created, m.muscle,"
@@ -31,6 +33,7 @@ def get_exercise(exercise_id: int):
 
 
 def get_workout(workout_id: int):
+    """Get workout by ID."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     exercise_artifact = db_utils.execute(
         f"SELECT * FROM workouts WHERE id = {workout_id}"
@@ -42,6 +45,7 @@ def get_workout(workout_id: int):
 
 
 def get_exercises_for_workout(workout_id: int):
+    """Get exercises for a given workout ID."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     selected_exercises_artifact = db_utils.execute(
         "SELECT a.id, a.name, a.muscle, b.num_sets, b.num_reps, b.num_rest,"
@@ -57,6 +61,7 @@ def get_exercises_for_workout(workout_id: int):
 
 
 def get_selected_exercise(exercise_id: int):
+    """Get a workout's selected exercise for a given ID."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     selected_exercise_artifact = db_utils.execute(
         "SELECT b.id, b.num_sets, b.num_reps, b.num_rest, b.notes, a.name AS"
@@ -70,21 +75,24 @@ def get_selected_exercise(exercise_id: int):
 
 
 def get_all_muscles():
+    """Get all muscle categories."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     muscles = db_utils.execute("SELECT * FROM muscles", fetch_all=True)
     return [muscle["muscle"] for muscle in muscles]
 
 
-# Pages
+# Routes
 @main.route("/home")
 @login_required
 def home():
+    """Home page."""
     return render_template("home.html")
 
 
 @main.route("/create_exercise", methods=("GET", "POST"))
 @login_required
 def create_exercise():
+    """Create exercise page."""
     muscles = get_all_muscles()
 
     if request.method == "POST":
@@ -96,8 +104,9 @@ def create_exercise():
         if not name:
             flash("Exercise name is required!")
         else:
+            # Handle exercise image
             if not image:
-                image_path = "static/images/coming_soon.jpg"
+                image_path = DEFAULT_EXERCISE_IMAGE_PATH
             else:
                 image_path = os.path.join(
                     "static/images/", secure_filename(image.filename)
@@ -121,6 +130,7 @@ def create_exercise():
 @main.route("/create_workout", methods=["GET", "POST"])
 @login_required
 def create_workout():
+    """Create a workout page."""
     if request.method == "POST":
         name = request.form.get("name")
         description = request.form.get("description", "")
@@ -132,7 +142,7 @@ def create_workout():
             row_id=True,
             commit=True,
         )
-        # create workout
+
         return redirect(url_for("main.edit_workout", workout_id=workout_id))
     return render_template("create_workout.html")
 
@@ -140,6 +150,7 @@ def create_workout():
 @main.route("/edit_workout/<int:workout_id>", methods=["GET", "POST"])
 @login_required
 def edit_workout(workout_id):
+    """Edit workout page."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     selected_workout = get_workout(workout_id)
     exercises = db_utils.execute("SELECT * FROM exercises", fetch_all=True)
@@ -173,6 +184,7 @@ def edit_workout(workout_id):
 @main.route("/library")
 @login_required
 def library():
+    """User's library page."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     exercises = db_utils.execute(
         "SELECT * FROM exercises WHERE name IN ( SELECT exercise FROM"
@@ -193,6 +205,7 @@ def library():
 @main.route("/search_exercises", methods=("GET", "POST"))
 @login_required
 def search_exercises():
+    """Search exercise page."""
     db_utils = SqliteUtilites(DATABASE_NAME)
 
     muscles = get_all_muscles()
@@ -230,6 +243,7 @@ def search_exercises():
 @main.route("/search_workouts")
 @login_required
 def search_workouts():
+    """Search workouts page."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     workouts = db_utils.execute(
         "SELECT a.name, a.description, a.id, a.created, b.name AS author FROM"
@@ -243,6 +257,7 @@ def search_workouts():
 @main.route("/<int:exercise_id>", methods=("GET", "POST"))
 @login_required
 def exercise(exercise_id):
+    """Exercise page."""
     exercise_artifact = get_exercise(exercise_id)
 
     if request.method == "POST":
@@ -263,6 +278,7 @@ def exercise(exercise_id):
 @main.route("/workout/<int:workout_id>", methods=("GET", "POST"))
 @login_required
 def workout(workout_id):
+    """Workout page."""
     workout_artifact = get_workout(workout_id)
     db_utils = SqliteUtilites(DATABASE_NAME)
 
@@ -288,37 +304,9 @@ def workout(workout_id):
     )
 
 
-# @main.route("/<int:`workout_id`>/edit_workout", methods=("GET", "POST"))
-# @login_required
-# def edit_workout(workout_id):
-#     workout_artifact = get_workout(workout_id)
-#
-#     if request.method == "POST":
-#         name = request.form["name"]
-#         description = request.form["description"]
-#
-#         if not name:
-#             flash("Name is required!")
-#         else:
-#             db_utils = SqliteUtilites(DATABASE_NAME)
-#             db_utils.execute(
-#                 f"UPDATE workouts SET name = '{name}',"
-#                 f" description = '{description}' WHERE id = {id}",
-#                 commit=True,
-#             )
-#             return redirect(url_for("main.search_workouts"))
-#
-#     selected_exercises = get_exercises_for_workout(workout_id)
-#
-#     return render_template(
-#         "edit_workout.html",
-#         workout=workout_artifact,
-#         selected_exercises=selected_exercises,
-#     )
-
-
 @main.route("/update_workout_order_", methods=["POST"])
 def update_workout_order():
+    """Handles updating workout order."""
     print(request.form.get("order_data"))
 
     return redirect(url_for("main.edit_workout", workout_id="1"))
@@ -327,6 +315,7 @@ def update_workout_order():
 @main.route("/<int:workout_id>/edit_workout_title", methods=("GET", "POST"))
 @login_required
 def edit_workout_title(workout_id):
+    """Editing workout title page."""
     workout_artifact = get_workout(workout_id)
 
     if request.method == "POST":
@@ -353,6 +342,7 @@ def edit_workout_title(workout_id):
 )
 @login_required
 def edit_workout_description(workout_id):
+    """Editing workout description page."""
     workout_artifact = get_workout(workout_id)
 
     if request.method == "POST":
@@ -379,6 +369,7 @@ def edit_workout_description(workout_id):
 @main.route("/<int:id>/edit", methods=("GET", "POST"))
 @login_required
 def edit(id):
+    """Edit exercise page."""
     exercise_artifact = get_exercise(id)
     muscles = get_all_muscles()
 
@@ -426,17 +417,16 @@ def edit(id):
 @main.route("/<int:id>/edit_workout_exercise", methods=("GET", "POST"))
 @login_required
 def edit_workout_exercise(id):
+    """Edit exercise in a given workout page."""
     exercise_artifact = get_selected_exercise(id)
     workout_id = exercise_artifact["WorkoutID"]
 
     if request.method == "POST":
-        print("post")
         num_sets = request.form.get("num_sets", 0)
         num_reps = request.form.get("num_reps", 0)
         num_rest = request.form.get("num_rest", 0)
         notes = request.form.get("notes", 0)
 
-        print(f"{num_sets} {num_reps} {num_rest} {notes}")
         db_utils = SqliteUtilites(DATABASE_NAME)
         db_utils.execute(
             f"UPDATE workout_exercises SET num_sets = '{num_sets}', num_reps ="
@@ -445,7 +435,6 @@ def edit_workout_exercise(id):
             commit=True,
         )
         return redirect(url_for("main.edit_workout", workout_id=workout_id))
-    print("getted")
     return render_template(
         "edit_workout_exercise.html", exercise=exercise_artifact
     )
@@ -454,6 +443,7 @@ def edit_workout_exercise(id):
 @main.route("/<int:id>/delete", methods=("POST",))
 @login_required
 def delete(id: int):
+    """Handles deleting exercise."""
     exercise_artifact = get_exercise(id)
 
     db_utils = SqliteUtilites(DATABASE_NAME)
@@ -466,6 +456,7 @@ def delete(id: int):
 @main.route("/<int:id>/delete_workout_exercise", methods=("POST",))
 @login_required
 def delete_workout_exercise(id: int):
+    """Handles deleting selected exercise from workout."""
     exercise_artifact = get_selected_exercise(id)
     workout_id = exercise_artifact["WorkoutID"]
     db_utils = SqliteUtilites(DATABASE_NAME)
@@ -473,13 +464,15 @@ def delete_workout_exercise(id: int):
         f"DELETE FROM workout_exercises WHERE id = {id}", commit=True
     )
 
-    # flash('"{}" was successfully deleted!'.format(exercise_artifact["name"]))
+    # TODO: appropriate flash message
+    #  flash('"{}" was successfully deleted!'.format(exercise_artifact["name"]))
     return redirect(url_for("main.edit_workout", workout_id=workout_id))
 
 
 @main.route("/<int:id>/delete_workout", methods=("POST",))
 @login_required
 def delete_workout(id: int):
+    """Handles deleting workout."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(f"DELETE FROM workouts WHERE id = {id}", commit=True)
 
