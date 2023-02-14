@@ -134,17 +134,21 @@ def create_workout():
     """Create a workout page."""
     if request.method == "POST":
         name = request.form.get("name")
-        description = request.form.get("description", "")
-        db_utils = SqliteUtilites(DATABASE_NAME)
 
-        workout_id = db_utils.execute(
-            "INSERT INTO workouts (name, user_id, description) VALUES"
-            f" ('{name}', {current_user.id}, '{description}')",
-            row_id=True,
-            commit=True,
-        )
+        if not name:
+            flash("Name is required!")
+        else:
+            description = request.form.get("description", "")
+            db_utils = SqliteUtilites(DATABASE_NAME)
 
-        return redirect(url_for("main.edit_workout", workout_id=workout_id))
+            workout_id = db_utils.execute(
+                "INSERT INTO workouts (name, user_id, description) VALUES"
+                f" ('{name}', {current_user.id}, '{description}')",
+                row_id=True,
+                commit=True,
+            )
+
+            return redirect(url_for("main.edit_workout", workout_id=workout_id))
     return render_template("create_workout.html")
 
 

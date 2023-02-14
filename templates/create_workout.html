@@ -19,6 +19,13 @@
         <h3>Workout Details</h3>
 
         <form method="post">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div>
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+            {% endwith %}
             <div class="form-group">
                 <label for='name'>Name</label>
                 <input type="text" name="name"
