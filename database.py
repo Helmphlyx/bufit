@@ -30,6 +30,10 @@ def init_muscle_table():
             f" ('{muscle_data['name']}', '{muscle_data['name_en']}')",
             commit=True,
         )
+    db_utils.execute(
+        f"INSERT INTO muscles (muscle) VALUES ('Uncategorized')",
+        commit=True,
+    )
 
 
 def init_exercise_table():
@@ -40,7 +44,7 @@ def init_exercise_table():
 
     # Set up exercise images
     image_dict = {}
-    default_image = "static/images/coming_soon.jpg"
+    default_image = "/static/img/example-exercise-img.jpg"
     for exercise_image_data in exercises_image_data:
         exercise_base = exercise_image_data.get("exercise_base")
         exercise_image = exercise_image_data.get("image", default_image)
@@ -58,7 +62,7 @@ def init_exercise_table():
         exercise_muscle = (
             exercise_data["muscles"][0]
             if len(exercise_data["muscles"]) > 0
-            else "UNKNOWN"
+            else "Uncategorized"
         )
         exercise_description = f"""
         {sanitizer(exercise_data['description'])}

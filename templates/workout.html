@@ -6,13 +6,13 @@
     <div class="detail-info">
         <div class="detail-info-header">
             <h2>{% block name %} {{ workout['name'] }} {% endblock %}</h2>
-            <h3>{% block name %} {{ author }} {% endblock %}</h3>
+            <h3>{% block author %} {{ author }} {% endblock %}</h3>
             <form method="post">
-                
+
                 <button type="submit" class="btn btn-danger btn-lg">
                     <i class = "bi bi-heart"></i>
                 </button>
-                
+
             </form>
         </div>
         <div class="detail-info-body">
@@ -23,7 +23,7 @@
 
         </div>
     </div>
-    
+
     <div class = "exercises-list">
         <h2>Exercises</h2>
         {% if selected_exercises %}
@@ -37,9 +37,9 @@
             <p>No exercises have been added.</p>
         {% endif %}
     </div>
-    
-    
-    
+
+
+
 </div>
 
 {% endblock %}

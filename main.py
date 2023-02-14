@@ -11,7 +11,7 @@ from models import User
 
 from settings import settings
 
-DEFAULT_EXERCISE_IMAGE_PATH = "static/images/coming_soon.jpg"
+DEFAULT_EXERCISE_IMAGE_PATH = "/static/img/example-exercise-img.jpg"
 DATABASE_NAME = settings.DATABASE_NAME
 main = Blueprint("main", __name__)
 
@@ -22,8 +22,8 @@ def get_exercise(exercise_id: int):
     db_utils = SqliteUtilites(DATABASE_NAME)
     exercise_artifact = db_utils.execute(
         "SELECT e.id, e.name, e.description, e.created, m.muscle,"
-        " m.muscle_latin FROM exercises e JOIN muscles m on e.muscle = m.id"
-        f" WHERE e.id = {exercise_id}",
+        " m.muscle_latin, e.image_url FROM exercises e JOIN muscles m on"
+        f" e.muscle = m.id WHERE e.id = {exercise_id}",
         fetch_all=False,
     )
 
@@ -233,8 +233,8 @@ def search_exercises():
     else:
         exercises = db_utils.execute(
             "SELECT e.id, e.name, e.description, e.created, m.muscle,"
-            " m.muscle_latin FROM exercises e JOIN muscles m on e.muscle ="
-            " m.id",
+            " e.image_url, m.muscle_latin FROM exercises e JOIN muscles m on"
+            " e.muscle = m.id",
             fetch_all=True,
         )
     return render_template(
