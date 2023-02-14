@@ -11,11 +11,13 @@ auth = Blueprint("auth", __name__)
 # Login Routes
 @auth.route("/")
 def login():
+    """Landing / Login page."""
     return render_template("login.html")
 
 
 @auth.route("/login", methods=["POST"])
 def login_post():
+    """Handle user login."""
     email = request.form.get("email")
     password = request.form.get("password")
     remember = True if request.form.get("remember") else False
@@ -35,11 +37,13 @@ def login_post():
 
 @auth.route("/signup")
 def signup():
+    """User signup page."""
     return render_template("signup.html")
 
 
 @auth.route("/signup", methods=["POST"])
 def signup_post():
+    """Handle user signup."""
     email = request.form.get("email")
     name = request.form.get("name")
     password = request.form.get("password")
@@ -72,6 +76,7 @@ def signup_post():
 
 @auth.route("/logout")
 def logout():
+    """Handle user logout."""
     logout_user()
     flash("You have successfully logged yourself out.")
     return redirect(url_for("auth.login"))

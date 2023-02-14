@@ -6,6 +6,7 @@
     <title>BUFit</title>
 </head>
 {% block content %}
+
 <div class="page-title search-workouts-bg">
     <h1 class="display-3 text-light">{% block title %} Search Workouts {% endblock %}</h1>
 </div>
@@ -22,6 +23,7 @@
             <div>
                 <h4>{{ workout['name'] }}</h4>
                 <p>Author: {{ workout['author'] }}</p>
+                <p>{{ workout['description'] }}</p>
             </div>
         </a>
         <div class = "card-details">
@@ -38,4 +40,5 @@
 
     {% endfor %}
 </div>
+
 {% endblock %}

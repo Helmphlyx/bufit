@@ -29,7 +29,7 @@
     <div class= "card-wrapper">
         <a class = "card-content" href="{{ url_for('main.exercise', exercise_id=exercise['id']) }}">
             <div class = "card-img">
-                image
+                <img style="max-height:100%;max-width:100%;object-fit:contain;" src="{{ exercise['image_url'] }}">
             </div>
             <div>
                 <h4>{{ exercise['name'] }}</h4>

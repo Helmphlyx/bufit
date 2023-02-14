@@ -17,27 +17,34 @@
         <h1>{% block title %} Create a Workout  {% endblock %}</h1>
 
         <h3>Workout Details</h3>
-    
+
         <form method="post">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div>
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+            {% endwith %}
             <div class="form-group">
                 <label for='name'>Name</label>
                 <input type="text" name="name"
                     placeholder="Workout Name" class="form-control"
                     value="{{ request.form['name'] }}"></input>
             </div>
-    
+
             <div class="form-group">
                 <label for='description'>Description</label>
                 <textarea name="description" placeholder="Description of Workout"
                         class="form-control">{{ request.form['description'] }}</textarea>
             </div>
-    
-    
+
+
             <div class="form-group d-flex justify-content-end">
                 <button type="submit" class="btn btn-success">Create</button>
             </div>
         </form>
     </div>
-    
+
 </body>
 {% endblock %}

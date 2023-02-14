@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} Edit "{{ exercise['WorkoutName'] }}" {% endblock %}</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for='num_sets'>Number of Sets</label>
+        <input type="number" name="num_sets"
+               value="{{exercise['num_sets']}}" class="form-control"></input>
+    </div>
+
+    <div class="form-group">
+        <label for='num_reps'>Number of Reps</label>
+        <input type="number" name="num_reps"
+               value="{{exercise['num_reps']}}" class="form-control"></input>
+    </div>
+
+    <div class="form-group">
+        <label for='num_reps'>Seconds of Rest Between Sets</label>
+        <input type="number" name="num_rest"
+               value="{{exercise['num_rest']}}" class="form-control"></input>
+    </div>
+
+    <div class="form-group">
+        <label for="notes">Notes</label>
+        <textarea name="notes" placeholder="{{exercise['notes']}}"
+                  class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+
+
+<form action="{{ url_for('main.delete_workout_exercise', id=exercise['id']) }}" method="POST">
+    <input type="submit" value="Delete Exercise"
+           class="btn btn-danger btn-sm"
+           onclick="return confirm('Are you sure you want to delete this exercise?')">
+</form>
+
+{% endblock %}
