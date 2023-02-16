@@ -68,6 +68,7 @@ h1 {
 }
 .detail-info h2 {
     color: #dc3545;
+    margin: 0 auto;
 }
 .detail-info-header {
     display: flex;
@@ -76,7 +77,7 @@ h1 {
 }
 .detail-info-body {
     color: white;
-    padding: 20px;
+    
 }
 .muscle-info {
     border-bottom: 1px solid #dc3545;
