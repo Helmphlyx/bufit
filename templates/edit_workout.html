@@ -28,15 +28,21 @@
                 </h2>  
             </div>
             <div class="detail-info-body">
+                
                 <div class="d-flex">
-                    <p>{{ workout['description'] }}</p>
+                    {% if not workout['description']%}
+                        <p><em>Description...</em></p>
+                    {% else %}
+                        <p>{{ workout['description'] }}</p>   
+                    {% endif %}
                     <p>
                         <a type = "button" class = "btn-sm btn-outline-danger ms-3" href="{{ url_for('main.edit_workout_description', workout_id=workout['id']) }}">
                             <i class="bi bi-pencil"></i>
                         </a>
                     </p>
-                    
+
                 </div>
+                
                 <p class="created-info">
                     Created on: <span class="badge badge-primary">{{ workout['created'] }}</span>
                 </p>
@@ -49,25 +55,61 @@
                     <span class="badge badge-warning">Edit Order</span>
                 </a>
                 {% if selected_exercises %}
-                {% for exercise in selected_exercises %}
-                <a href="{{ url_for('main.exercise', exercise_id=exercise['id']) }}">
-                    <h3>{{ exercise['name'] }}</h3>
-                </a>
-                <p>Sets: {{ exercise['num_sets'] }} x Reps: {{ exercise['num_reps'] }}</p>
-                <p>Rest Between Sets: {{ exercise['num_rest'] }} sec</p>
-                <p>{{ exercise['notes'] }}</p>
-                <span class="badge badge-primary">{{ exercise['created'] }}</span>
-                <a href="{{ url_for('main.edit_workout_exercise', id=exercise['WorkoutExerciseID']) }}">
-                    <span class="badge badge-warning">Edit</span>
-                </a>
-                <form action="{{ url_for('main.delete_workout_exercise', id=exercise['WorkoutExerciseID']) }}" method="POST">
-                    <input type="submit" value="Delete"
-                           class="btn btn-danger btn-sm"
-                           onclick="return confirm('Are you sure you want to delete this exercise?')">
-                </form>
-                <hr>
                 
-                {% endfor %}
+                <div class="table-responsive m-3">
+                    <table class = "table table-light table-striped">
+                        <thead>
+                            <tr>
+                                <th scope = "col">#</th>
+                                <th scope = "col">Exercise</th>
+                                <th scope = "col">Sets</th>
+                                <th scope = "col">Reps</th>
+                                <th scope = "col">Rest between Sets</th>
+                                <th scope = "col"></th>
+                                <th scope = "col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for exercise in selected_exercises %}
+                            <tr>
+                                <th scope = "row">
+                                    {{ loop.index }}
+                                </th>
+                                <td>
+                                    {{exercise['name']}}
+                                </td>
+                                <td>
+                                    {{exercise['num_sets']}}
+                                </td>
+                                <td>
+                                    {{exercise['num_reps']}}
+                                </td>
+                                <td>
+                                    {{exercise['num_rest']}}
+                                </td>
+                                <td>
+                                    <a class="btn btn-warning btn-sm" href="{{ url_for('main.edit_workout_exercise', id=exercise['WorkoutExerciseID']) }}">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <form action="{{ url_for('main.delete_workout_exercise', id=exercise['WorkoutExerciseID']) }}" method="POST">
+                                        <button type="submit"
+                                               class="btn btn-danger btn-sm"
+                                               onclick="return confirm('Are you sure you want to delete this exercise?')">
+                                               <i class="bi bi-trash3-fill"></i> 
+                                        </button>
+                                               
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            
+                
+                
                 {% else %}
                     <p>No exercises have been added.</p>
                 {% endif %}
@@ -114,7 +156,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col">
-                            <button type="submit" class="btn btn-primary">Add Exercise</button>
+                            <button type="submit" class="btn btn-success">Add Exercise</button>
                         </div>
                     </div>
                     
