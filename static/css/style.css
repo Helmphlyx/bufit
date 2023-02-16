@@ -201,15 +201,25 @@ h1 {
 }
 .footer {
     background-color: rgb(66, 64, 64);
-    color: white;
+    color: rgb(202, 202, 202);
     padding: 30px 20px;
     min-height: 50px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     width: 100%;
     margin-top: auto;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px -3px 6px;
 }
 .footer ul {
     list-style-type: none;
+}
+.footer ul li a {
+    color: #dc3545;
+}
+.bufit-description {
+    max-width: 800px;
+}
+.social-media {
+    display: flex;
+    justify-content: center;
 }
