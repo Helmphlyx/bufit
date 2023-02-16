@@ -10,7 +10,7 @@
 <div class="page-title search-workouts-bg">
     <h1 class="display-3 text-light">{% block title %} Search Workouts {% endblock %}</h1>
 </div>
-
+{% if workouts%}
 <form  class  = "form-inline" method="POST" action="{{ url_for('main.search_workouts') }}">
     <div class="input-group mb-3">
         <input type="text" class="form-control" id = "workout_name" name = "workout_name" placeholder="Search workout name..." aria-label="search" aria-describedby="button-addon2">
@@ -20,7 +20,7 @@
         </button>
     </div>
 </form>
-
+{% endif%}
 <div class="cards-section-wrapper">
     {% if not workouts%}
     <p class = "mx-auto">There are no workouts.</p>
