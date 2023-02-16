@@ -246,16 +246,34 @@ def search_exercises():
     )
 
 
-@main.route("/search_workouts")
+@main.route("/search_workouts", methods=("GET", "POST"))
 @login_required
 def search_workouts():
     """Search workouts page."""
     db_utils = SqliteUtilites(DATABASE_NAME)
-    workouts = db_utils.execute(
-        "SELECT a.name, a.description, a.id, a.created, b.name AS author FROM"
-        " workouts a JOIN users b ON a.user_id = b.id",
-        fetch_all=True,
-    )
+    
+    if request.method == "POST":
+        workout_name = request.form.get("workout_name")
+        if not workout_name:
+            workouts = db_utils.execute(
+                "SELECT a.name, a.description, a.id, a.created, b.name AS author FROM"
+                " workouts a JOIN users b ON a.user_id = b.id",
+                fetch_all=True,
+            )
+        else:
+            workouts = db_utils.execute(
+                "SELECT a.name, a.description, a.id, a.created, b.name AS author FROM"
+                " workouts a JOIN users b ON a.user_id = b.id"
+                f" WHERE a.name = '{workout_name}'",
+                fetch_all=True,
+            )
+        redirect(url_for("main.search_workouts", workouts=workouts))
+    else:
+        workouts = db_utils.execute(
+            "SELECT a.name, a.description, a.id, a.created, b.name AS author FROM"
+            " workouts a JOIN users b ON a.user_id = b.id",
+            fetch_all=True,
+        )
 
     return render_template("search_workouts.html", workouts=workouts)
 
