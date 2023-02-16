@@ -11,6 +11,8 @@ from models import User
 
 from settings import settings
 
+from helpers import sanitize_input, title_input
+
 DEFAULT_EXERCISE_IMAGE_PATH = "/static/img/example-exercise-img.jpg"
 DATABASE_NAME = settings.DATABASE_NAME
 main = Blueprint("main", __name__)
@@ -97,9 +99,9 @@ def create_exercise():
     muscles = get_all_muscles()
 
     if request.method == "POST":
-        name = request.form.get("name")
+        name = sanitize_input(request.form.get("name"))
         muscle = request.form.get("muscle")
-        description = request.form.get("description")
+        description = sanitize_input(request.form.get("description"))
         image = request.files["image"]
 
         if not name:
@@ -133,12 +135,12 @@ def create_exercise():
 def create_workout():
     """Create a workout page."""
     if request.method == "POST":
-        name = request.form.get("name")
+        name = sanitize_input(request.form.get("name"))
 
         if not name:
             flash("Name is required!")
         else:
-            description = request.form.get("description", "")
+            description = sanitize_input(request.form.get("description", ""))
             db_utils = SqliteUtilites(DATABASE_NAME)
 
             workout_id = db_utils.execute(
@@ -253,7 +255,7 @@ def search_workouts():
     db_utils = SqliteUtilites(DATABASE_NAME)
     
     if request.method == "POST":
-        workout_name = request.form.get("workout_name")
+        workout_name = sanitize_input(request.form.get("workout_name"))
         if not workout_name:
             workouts = db_utils.execute(
                 "SELECT a.name, a.description, a.id, a.created, b.name AS author FROM"
