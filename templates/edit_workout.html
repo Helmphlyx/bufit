@@ -1,90 +1,104 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{% block title %} Workout: {{ author }} {% endblock %}</h1>
-<h5>{{ workout['author'] }}</h5>
-
-<h2>Title</h2>
-<a href="{{ url_for('main.edit_workout_title', workout_id=workout['id']) }}">
-    <span class="badge badge-warning">Edit Title</span>
-</a>
-<p>{{ workout['name'] }}</p>
-
-<h2>Description</h2>
-<a href="{{ url_for('main.edit_workout_description', workout_id=workout['id']) }}">
-    <span class="badge badge-warning">Edit Description</span>
-</a>
-<p>{{ workout['description'] }}</p>
-
-<h2>Exercise List</h2>
-<a href="{{ url_for('main.edit_workout_order', workout_id=workout['id']) }}">
-    <span class="badge badge-warning">Edit Order</span>
-</a>
-{% if selected_exercises %}
-{% for exercise in selected_exercises %}
-<a href="{{ url_for('main.exercise', exercise_id=exercise['id']) }}">
-    <h3>{{ exercise['name'] }}</h3>
-</a>
-<p>Sets: {{ exercise['num_sets'] }} x Reps: {{ exercise['num_reps'] }}</p>
-<p>Rest Between Sets: {{ exercise['num_rest'] }} sec</p>
-<p>{{ exercise['notes'] }}</p>
-<span class="badge badge-primary">{{ exercise['created'] }}</span>
-<a href="{{ url_for('main.edit_workout_exercise', id=exercise['WorkoutExerciseID']) }}">
-    <span class="badge badge-warning">Edit</span>
-</a>
-<form action="{{ url_for('main.delete_workout_exercise', id=exercise['WorkoutExerciseID']) }}" method="POST">
-    <input type="submit" value="Delete"
-           class="btn btn-danger btn-sm"
-           onclick="return confirm('Are you sure you want to delete this exercise?')">
-</form>
-<hr>
-
-{% endfor %}
-{% else %}
-    <p>No exercises have been added.</p>
-{% endif %}
-
-
-<h2>Add Exercises</h2>
-
-<form method="post" action="{{ url_for('main.edit_workout', workout_id=workout['id']) }}">
-
-    <div class="form-group">
-        <select name=exercise class="form-control">
-            {% for exercise in exercises %}
-            <option value="{{exercise['id']}}" SELECTED>{{exercise['name']}}</option>"
-            {% endfor %}
-        </select>
+<body>
+    <style>
+        body{
+            background-image: linear-gradient(45deg,
+            rgba(245, 69, 66, 0.408),
+            rgba(8, 82, 156, 0.341)), url("../static/img/marlon-silva-W79G7kIZ5OE-unsplash.jpg");
+            background-size: cover;
+            padding:0;
+            margin:0;
+        }
+        </style>
+    <div class = "create-box">
+        <h1>{% block title %} Workout: {{ author }} {% endblock %}</h1>
+        <h5>{{ workout['author'] }}</h5>
+        
+        <h2>Title</h2>
+        <a href="{{ url_for('main.edit_workout_title', workout_id=workout['id']) }}">
+            <span class="badge badge-warning">Edit Title</span>
+        </a>
+        <p>{{ workout['name'] }}</p>
+        
+        <h2>Description</h2>
+        <a href="{{ url_for('main.edit_workout_description', workout_id=workout['id']) }}">
+            <span class="badge badge-warning">Edit Description</span>
+        </a>
+        <p>{{ workout['description'] }}</p>
+        
+        <h2>Exercise List</h2>
+        <a href="{{ url_for('main.edit_workout_order', workout_id=workout['id']) }}">
+            <span class="badge badge-warning">Edit Order</span>
+        </a>
+        {% if selected_exercises %}
+        {% for exercise in selected_exercises %}
+        <a href="{{ url_for('main.exercise', exercise_id=exercise['id']) }}">
+            <h3>{{ exercise['name'] }}</h3>
+        </a>
+        <p>Sets: {{ exercise['num_sets'] }} x Reps: {{ exercise['num_reps'] }}</p>
+        <p>Rest Between Sets: {{ exercise['num_rest'] }} sec</p>
+        <p>{{ exercise['notes'] }}</p>
+        <span class="badge badge-primary">{{ exercise['created'] }}</span>
+        <a href="{{ url_for('main.edit_workout_exercise', id=exercise['WorkoutExerciseID']) }}">
+            <span class="badge badge-warning">Edit</span>
+        </a>
+        <form action="{{ url_for('main.delete_workout_exercise', id=exercise['WorkoutExerciseID']) }}" method="POST">
+            <input type="submit" value="Delete"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Are you sure you want to delete this exercise?')">
+        </form>
+        <hr>
+        
+        {% endfor %}
+        {% else %}
+            <p>No exercises have been added.</p>
+        {% endif %}
+        
+        
+        <h2>Add Exercises</h2>
+        
+        <form method="post" action="{{ url_for('main.edit_workout', workout_id=workout['id']) }}">
+        
+            <div class="form-group">
+                <select name=exercise class="form-control">
+                    {% for exercise in exercises %}
+                    <option value="{{exercise['id']}}" SELECTED>{{exercise['name']}}</option>"
+                    {% endfor %}
+                </select>
+            </div>
+        
+            <div class="form-group">
+                <label for='num_sets'>Number of Sets</label>
+                <input type="number" name="num_sets"
+                       value=1 class="form-control"></input>
+            </div>
+        
+            <div class="form-group">
+                <label for='num_reps'>Number of Reps</label>
+                <input type="number" name="num_reps"
+                       value=1 class="form-control"></input>
+            </div>
+        
+            <div class="form-group">
+                <label for='num_reps'>Seconds of Rest Between Sets</label>
+                <input type="number" name="num_rest"
+                       value=60 class="form-control"></input>
+            </div>
+        
+            <div class="form-group">
+                <label for="notes">Notes</label>
+                <textarea name="notes" placeholder="No notes."
+                          class="form-control"></textarea>
+            </div>
+        
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Add Exercise</button>
+            </div>
+        </form>
     </div>
-
-    <div class="form-group">
-        <label for='num_sets'>Number of Sets</label>
-        <input type="number" name="num_sets"
-               value=1 class="form-control"></input>
-    </div>
-
-    <div class="form-group">
-        <label for='num_reps'>Number of Reps</label>
-        <input type="number" name="num_reps"
-               value=1 class="form-control"></input>
-    </div>
-
-    <div class="form-group">
-        <label for='num_reps'>Seconds of Rest Between Sets</label>
-        <input type="number" name="num_rest"
-               value=60 class="form-control"></input>
-    </div>
-
-    <div class="form-group">
-        <label for="notes">Notes</label>
-        <textarea name="notes" placeholder="No notes."
-                  class="form-control"></textarea>
-    </div>
-
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Add Exercise</button>
-    </div>
-</form>
+</body>
 
 
 {% endblock %}
