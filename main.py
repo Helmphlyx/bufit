@@ -266,7 +266,7 @@ def search_workouts():
             workouts = db_utils.execute(
                 "SELECT a.name, a.description, a.id, a.created, b.name AS author FROM"
                 " workouts a JOIN users b ON a.user_id = b.id"
-                f" WHERE a.name = '{workout_name}'",
+                f" WHERE a.name LIKE '%{workout_name}%'",
                 fetch_all=True,
             )
         redirect(url_for("main.search_workouts", workouts=workouts))
