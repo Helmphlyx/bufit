@@ -156,6 +156,9 @@ h1 {
     color:gray;
     margin: 10px;
 }
+.card-content-workout {
+    flex-direction: column;
+}
 .card-content:hover  {
     text-decoration: none;
 
@@ -182,6 +185,25 @@ h1 {
     flex-direction: column;
     align-items: flex-end;
 }
+.btn-bd-warning {
+    color: #ffc107;
+    border-radius: 50%;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.btn-bd-warning:hover {
+    background-color:#ffc10776;
+    color: white;
+    
+  }
+.btn-bd-danger {
+    color:rgb(198, 11, 11);
+    border-radius: 50%;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  }
+.btn-bd-danger:hover {
+    background-color:rgba(198, 11, 11, 0.36);
+    color: rgb(198, 11, 11);
+  }
 .cards-section-wrapper {
     display: flex;
     flex-direction: row;
