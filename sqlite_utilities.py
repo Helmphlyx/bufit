@@ -29,6 +29,7 @@ class SqliteUtilites(DatabaseUtilities):
         :return:
         """
         conn = self._get_db_connection()
+        sql = f'''{sql}'''
         if fetch_all:
             result = conn.execute(sql).fetchall()
         else:
