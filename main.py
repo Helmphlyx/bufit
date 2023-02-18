@@ -126,7 +126,7 @@ def create_new_exercise(
 
 
 def delete_exercise(exercise_id: int):
-    """Create exercise into exercise table."""
+    """Delete exercise in exercise table."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(
         f"DELETE FROM workout_exercises WHERE id = ?",
@@ -226,7 +226,7 @@ def get_liked_workout(user_id: int):
 
 
 def like_workout(user_id: int, workout_name: str):
-    """Get all liked exercises by a given user id."""
+    """Like a workout."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(
         f"INSERT INTO exercise_likes (user_id, exercise) VALUES (?, ?)",
@@ -239,7 +239,7 @@ def like_workout(user_id: int, workout_name: str):
 def update_workout_exercise(
     workout_id: int, num_reps, num_sets: int, num_rest: int, notes: str
 ):
-    """Update exercise in exercise table."""
+    """Update exercise in workout_exercises table."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(
         f"UPDATE workout_exercises SET num_sets = ?, num_reps ="
@@ -263,7 +263,7 @@ def update_workout_title(workout_id: int, title: str):
 
 
 def update_workout_description(workout_id: int, description: str):
-    """Get all liked exercises by a given user id."""
+    """Update a workout's description."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(
         f"UPDATE workouts SET description = ? WHERE id = ?;",
