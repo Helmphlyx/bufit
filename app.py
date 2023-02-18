@@ -11,6 +11,7 @@ global_user = None
 def create_app():
     """Configurations for our Flask web-app."""
     SQLALCHEMY_DATABASE_URI = f"sqlite:///{settings.DATABASE_SHORT_NAME}"
+    SQLALCHEMY_DATABASE_URI_LONG = f"sqlite:///{settings.DATABASE_NAME}"
 
     app = Flask(__name__)
     app.config[
@@ -34,7 +35,7 @@ def create_app():
     from models import User
 
     with app.app_context():
-        if not database_exists(SQLALCHEMY_DATABASE_URI):
+        if not database_exists(SQLALCHEMY_DATABASE_URI_LONG):
             db.create_all()
             init_db()
     return app
