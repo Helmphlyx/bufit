@@ -11,6 +11,8 @@ def sanitize_input(input):
         result_list.append(element)
     input_sanitized = " ".join(result_list)
     return input_sanitized
+
+
 def title_input(input):
     input_title = input.title()
     return input_title
