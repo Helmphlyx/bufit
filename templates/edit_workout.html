@@ -27,7 +27,7 @@
 </a>
 <p>Sets: {{ exercise['num_sets'] }} x Reps: {{ exercise['num_reps'] }}</p>
 <p>Rest Between Sets: {{ exercise['num_rest'] }} sec</p>
-<p>{{ exercise['notes'] }}</p>
+<p>Notes: {{ exercise['notes'] }}</p>
 <span class="badge badge-primary">{{ exercise['created'] }}</span>
 <a href="{{ url_for('main.edit_workout_exercise', id=exercise['WorkoutExerciseID']) }}">
     <span class="badge badge-warning">Edit</span>
