@@ -1,3 +1,5 @@
+from typing import Optional
+
 from db.utilities.db_utilities import DatabaseUtilities
 import sqlite3
 
@@ -17,6 +19,7 @@ class SqliteUtilites(DatabaseUtilities):
     def execute(
         self,
         sql: str,
+        params: Optional[tuple] = None,
         fetch_all: bool = False,
         commit: bool = False,
         row_id: bool = False,
@@ -24,16 +27,23 @@ class SqliteUtilites(DatabaseUtilities):
         """
         Execute passed SQL on db.
         :param sql: the sql to be executed
+        :param params: parameters to pass to the sql
         :param fetch_all: flag to fetch all results, default is fetch one row
         :param commit: flag to commit query changes to db
         :return:
         """
         conn = self._get_db_connection()
-        sql = f'''{sql}'''
+        sql = f"""{sql}"""
         if fetch_all:
-            result = conn.execute(sql).fetchall()
+            if params:
+                result = conn.execute(sql, params).fetchall()
+            else:
+                result = conn.execute(sql).fetchall()
         else:
-            result = conn.execute(sql).fetchone()
+            if params:
+                result = conn.execute(sql, params).fetchone()
+            else:
+                result = conn.execute(sql).fetchone()
 
         if commit:
             conn.commit()

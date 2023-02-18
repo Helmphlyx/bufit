@@ -12,7 +12,7 @@ from models import User
 
 from settings import settings
 
-from helpers import sanitize_input, title_input
+from helpers import sanitize_input
 
 DEFAULT_EXERCISE_IMAGE_PATH = "/static/img/example-exercise-img.jpg"
 DATABASE_NAME = settings.DATABASE_NAME
@@ -24,9 +24,10 @@ def get_exercise(exercise_id: int):
     """Get exercise by ID."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     exercise_artifact = db_utils.execute(
-        "SELECT e.id, e.name, e.description, e.created, m.muscle,"
-        " m.muscle_latin, e.image_url FROM exercises e JOIN muscles m on"
-        f" e.muscle = m.id WHERE e.id = {exercise_id}",
+        f"SELECT e.id, e.name, e.description, e.created, m.muscle,"
+        f" m.muscle_latin, e.image_url FROM exercises e JOIN muscles m on"
+        f" e.muscle = m.id WHERE e.id = ?",
+        params=(exercise_id,),
         fetch_all=False,
     )
 
@@ -39,9 +40,9 @@ def check_exercise_name_exists(exercise_name: str):
     """Check exercise by name."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     count = db_utils.execute(
-        f"SELECT COUNT(id) FROM exercises WHERE "
-        f"name = '{exercise_name}'"
-    )
+        f"SELECT COUNT(id) FROM exercises WHERE name = ?",
+        params=(exercise_name,),
+    )[0]
 
     return count > 0
 
@@ -63,9 +64,23 @@ def get_all_exercises_by_muscles(muscle: str):
     """Get all exercises by a muscle group."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     exercises = db_utils.execute(
-        "SELECT e.id, e.name, e.description, e.created, e.image_url,"
-        " m.muscle, m.muscle_latin FROM exercises e JOIN muscles m on"
-        f" e.muscle = m.id WHERE m.muscle = '{muscle}'",
+        f"SELECT e.id, e.name, e.description, e.created, e.image_url,"
+        f" m.muscle, m.muscle_latin FROM exercises e JOIN muscles m on"
+        f" e.muscle = m.id WHERE m.muscle = ?",
+        params=(muscle,),
+        fetch_all=True,
+    )
+    return exercises
+
+
+def get_similar_exercises_by_name(exercise_name: str):
+    """Get similar exercises by name."""
+    db_utils = SqliteUtilites(DATABASE_NAME)
+    exercises = db_utils.execute(
+        f"SELECT e.id, e.name, e.description, e.created, e.image_url,"
+        f" m.muscle, m.muscle_latin FROM exercises e JOIN muscles m on"
+        f" e.muscle = m.id WHERE e.name LIKE ?",
+        params=(exercise_name,),
         fetch_all=True,
     )
     return exercises
@@ -75,8 +90,9 @@ def get_liked_exercises(user_id: int):
     """Get all liked exercises by a given user id."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     liked_exercises = db_utils.execute(
-        "SELECT * FROM exercises WHERE name IN ( SELECT exercise FROM"
-        f" exercise_likes WHERE user_id = {user_id})",
+        f"SELECT * FROM exercises WHERE name IN ( SELECT exercise FROM"
+        f" exercise_likes WHERE user_id = ?)",
+        params=(user_id,),
         fetch_all=True,
     )
 
@@ -87,20 +103,23 @@ def like_exercise(user_id: int, exercise_name: str):
     """Get all liked exercises by a given user id."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(
-        "INSERT INTO exercise_likes (user_id, exercise) VALUES"
-        f" ({user_id}, '{exercise_name}')",
+        f"INSERT INTO exercise_likes (user_id, exercise) VALUES (?, ?)",
+        params=(user_id, exercise_name),
         commit=True,
     )
     return
 
 
-def create_new_exercise(name: str, muscle_id: str, description: str, image_path: str):
+def create_new_exercise(
+    name: str, muscle_id: str, description: str, image_path: str
+):
     """Create exercise into exercise table."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(
-        "INSERT INTO exercises (name, muscle, description, image_url)"
-        f" VALUES ('{name}', '{muscle_id}', '{description}',"
-        f" '{image_path}')",
+        f"INSERT INTO exercises (name, muscle, description, image_url)"
+        f" VALUES (?, ?, ?,"
+        f" ?)",
+        params=(name, muscle_id, description, image_path),
         commit=True,
     )
     return
@@ -110,26 +129,36 @@ def delete_exercise(exercise_id: int):
     """Create exercise into exercise table."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(
-        f"DELETE FROM workout_exercises WHERE id = {exercise_id}", commit=True
+        f"DELETE FROM workout_exercises WHERE id = ?",
+        params=(exercise_id,),
+        commit=True,
     )
     return
 
 
-def update_exercise(name: str, muscle_id: str, exercise_id: int, description: str, image_path: Optional[str] = None):
+def update_exercise(
+    name: str,
+    muscle_id: str,
+    exercise_id: int,
+    description: str,
+    image_path: Optional[str] = None,
+):
     """Update exercise in exercise table."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     if image_path is None:
         db_utils.execute(
-            f"UPDATE exercises SET name = '{name}', muscle ="
-            f" '{muscle_id}', description = '{description}' WHERE id ="
-            f" {exercise_id}",
+            f"UPDATE exercises SET name = ?, muscle ="
+            f" ?, description = ? WHERE id ="
+            f" ?",
+            params=(name, muscle_id, description, exercise_id),
             commit=True,
         )
     else:
         db_utils.execute(
-            f"UPDATE exercises SET name = '{name}', muscle ="
-            f" '{muscle_id}', description = '{description}',"
-            f" image_url='{image_path}' WHERE id = {exercise_id}",
+            f"UPDATE exercises SET name = ?, muscle ="
+            f" ?, description = ?,"
+            f" image_url = ? WHERE id = ?",
+            params=(name, muscle_id, description, image_path, exercise_id),
             commit=True,
         )
     return
@@ -139,7 +168,7 @@ def get_workout(workout_id: int):
     """Get workout by ID."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     exercise_artifact = db_utils.execute(
-        f"SELECT * FROM workouts WHERE id = {workout_id}"
+        f"SELECT * FROM workouts WHERE id = ?", params=(workout_id,)
     )
 
     if exercise_artifact is None:
@@ -147,13 +176,27 @@ def get_workout(workout_id: int):
     return exercise_artifact
 
 
+def get_similar_workout_by_name(workout_name: str):
+    """Get similar workout by name."""
+    db_utils = SqliteUtilites(DATABASE_NAME)
+    workouts = db_utils.execute(
+        f"SELECT a.name, a.description, a.id, a.created, b.name AS author FROM"
+        f" workouts a JOIN users b ON a.user_id = b.id"
+        f" WHERE a.name LIKE '%' || ? || '%'",
+        params=(workout_name,),
+        fetch_all=True,
+    )
+
+    return workouts
+
+
 def check_workout_name_exists(workout_name: str, user_id: int):
     """Check workout by name and user id."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     count = db_utils.execute(
-        f"SELECT COUNT(id) FROM workouts WHERE user_id = {user_id} AND "
-        f"WHERE name = '{workout_name}'"
-    )
+        f"SELECT COUNT(id) FROM workouts WHERE user_id = ? AND name = ?",
+        params=(user_id, workout_name),
+    )[0]
 
     return count > 0
 
@@ -173,8 +216,9 @@ def get_liked_workout(user_id: int):
     """Get all liked workouts by a given user id."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     liked_workouts = db_utils.execute(
-        "SELECT * FROM workouts WHERE name IN ( SELECT workout FROM"
-        f" workout_likes WHERE user_id = {user_id})",
+        f"SELECT * FROM workouts WHERE name IN ( SELECT workout FROM"
+        f" workout_likes WHERE user_id = ?)",
+        params=(user_id,),
         fetch_all=True,
     )
 
@@ -185,20 +229,23 @@ def like_workout(user_id: int, workout_name: str):
     """Get all liked exercises by a given user id."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(
-        "INSERT INTO exercise_likes (user_id, exercise) VALUES"
-        f" ({user_id}, '{workout_name}')",
+        f"INSERT INTO exercise_likes (user_id, exercise) VALUES (?, ?)",
+        params=(user_id, workout_name),
         commit=True,
     )
     return
 
 
-def update_workout(workout_id: int, num_reps, num_sets: int, num_rest: int, notes: str):
+def update_workout_exercise(
+    workout_id: int, num_reps, num_sets: int, num_rest: int, notes: str
+):
     """Update exercise in exercise table."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(
-        f"UPDATE workout_exercises SET num_sets = '{num_sets}', num_reps ="
-        f" '{num_reps}', num_rest = '{num_rest}', notes = '{notes}' WHERE"
-        f" id = {workout_id}",
+        f"UPDATE workout_exercises SET num_sets = ?, num_reps ="
+        f" ?, num_rest = ?, notes = ? WHERE"
+        f" id = ?",
+        params=(num_sets, num_reps, num_rest, notes, workout_id),
         commit=True,
     )
     return
@@ -208,8 +255,8 @@ def update_workout_title(workout_id: int, title: str):
     """Update a workout's title."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(
-        f"UPDATE workouts SET name = '{title}' WHERE id ="
-        f" {workout_id};",
+        f"UPDATE workouts SET name = ? WHERE id = ?;",
+        params=(title, workout_id),
         commit=True,
     )
     return
@@ -219,8 +266,8 @@ def update_workout_description(workout_id: int, description: str):
     """Get all liked exercises by a given user id."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(
-        f"UPDATE workouts SET description = '{description}' WHERE id ="
-        f" {workout_id};",
+        f"UPDATE workouts SET description = ? WHERE id = ?;",
+        params=(description, workout_id),
         commit=True,
     )
     return
@@ -230,8 +277,8 @@ def create_new_workout(name: int, user_id: int, description: str):
     """Create workout into workout table."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     workout_id = db_utils.execute(
-        "INSERT INTO workouts (name, user_id, description) VALUES"
-        f" ('{name}', {user_id}, '{description}')",
+        f"INSERT INTO workouts (name, user_id, description) VALUES (?, ?, ?)",
+        params=(name, user_id, description),
         row_id=True,
         commit=True,
     )
@@ -242,7 +289,9 @@ def delete_workout_by_id(workout_id: int):
     """Delete workout from workout table."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(
-        f"DELETE FROM workout_exercises WHERE id = {workout_id}", commit=True
+        f"DELETE FROM workout_exercises WHERE id = ?",
+        params=(workout_id,),
+        commit=True,
     )
     return
 
@@ -251,7 +300,7 @@ def get_muscle_id_for_muscle(muscle: str):
     """Get workout by ID."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     muscle_id = db_utils.execute(
-        f"SELECT id FROM muscles WHERE muscles.muscle = '{muscle}'"
+        f"SELECT id FROM muscles WHERE muscles.muscle = ?", params=(muscle,)
     )[0]
 
     if muscle_id is None:
@@ -263,10 +312,11 @@ def get_exercises_for_workout(workout_id: int):
     """Get exercises for a given workout ID."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     selected_exercises_artifact = db_utils.execute(
-        "SELECT a.id, a.name, a.muscle, b.num_sets, b.num_reps, b.num_rest,"
-        " b.id AS WorkoutExerciseID FROM workout_exercises b JOIN exercises a"
-        f" ON a.id = b.ExercisesID AND b.WorkoutID = {workout_id} ORDER BY"
-        " b.exercise_order",
+        f"SELECT a.id, a.name, a.muscle, b.num_sets, b.num_reps, b.num_rest,"
+        f" b.notes, b.id AS WorkoutExerciseID FROM workout_exercises b JOIN"
+        f" exercises a ON a.id = b.ExercisesID AND b.WorkoutID = ? ORDER BY"
+        f" b.exercise_order",
+        params=(workout_id,),
         fetch_all=True,
     )
 
@@ -276,15 +326,31 @@ def get_exercises_for_workout(workout_id: int):
     return selected_exercises_artifact
 
 
-def create_exercise_for_workout(workout_id: int, exercise_id: str, num_sets: int, num_reps: int, num_rest: int,
-                                notes: str, workout_order: int):
+def create_exercise_for_workout(
+    workout_id: int,
+    exercise_id: str,
+    num_sets: int,
+    num_reps: int,
+    num_rest: int,
+    notes: str,
+    workout_order: int,
+):
     """Create exercise for a given workout ID."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(
-        "INSERT INTO workout_exercises (WorkoutID, ExercisesID,"
-        " num_sets, num_reps, num_rest, notes, exercise_order)"
-        f" VALUES({workout_id}, {exercise_id}, {num_sets}, {num_reps},"
-        f" {num_rest},  '{notes}', {workout_order})",
+        f"INSERT INTO workout_exercises (WorkoutID, ExercisesID,"
+        f" num_sets, num_reps, num_rest, notes, exercise_order)"
+        f" VALUES(?, ?, ?, ?,"
+        f" ?,  ?, ?)",
+        params=(
+            workout_id,
+            exercise_id,
+            num_sets,
+            num_reps,
+            num_rest,
+            notes,
+            workout_order,
+        ),
         commit=True,
     )
 
@@ -294,7 +360,11 @@ def create_exercise_for_workout(workout_id: int, exercise_id: str, num_sets: int
 def delete_workout_exercise_by_id(workout_exercise_id: int):
     """Delete exercise from workout."""
     db_utils = SqliteUtilites(DATABASE_NAME)
-    db_utils.execute(f"DELETE FROM workouts WHERE id = {workout_exercise_id}", commit=True)
+    db_utils.execute(
+        f"DELETE FROM workouts WHERE id = ?",
+        params=(workout_exercise_id,),
+        commit=True,
+    )
     return
 
 
@@ -302,9 +372,10 @@ def get_selected_exercise(exercise_id: int):
     """Get a workout's selected exercise for a given ID."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     selected_exercise_artifact = db_utils.execute(
-        "SELECT b.id, b.num_sets, b.num_reps, b.num_rest, b.notes, a.name AS"
-        " WorkoutName, a.id as WorkoutID FROM workout_exercises b JOIN"
-        f" workouts a ON a.id = b.WorkoutID WHERE b.id = {exercise_id}"
+        f"SELECT b.id, b.num_sets, b.num_reps, b.num_rest, b.notes, a.name AS"
+        f" WorkoutName, a.id as WorkoutID FROM workout_exercises b JOIN"
+        f" workouts a ON a.id = b.WorkoutID WHERE b.id = ?",
+        params=(exercise_id,),
     )
 
     if selected_exercise_artifact is None:
@@ -371,11 +442,20 @@ def create_workout():
             flash("Name is required!")
         else:
             if check_workout_name_exists(name, current_user.id):
-                flash("You have a workout with this name. Please choose a different name...")
+                flash(
+                    "You have a workout with this name. Please choose a"
+                    " different name..."
+                )
             else:
-                description = sanitize_input(request.form.get("description", ""))
-                workout_id = create_new_workout(name, current_user.id, description)
-                return redirect(url_for("main.edit_workout", workout_id=workout_id))
+                description = sanitize_input(
+                    request.form.get("description", "")
+                )
+                workout_id = create_new_workout(
+                    name, current_user.id, description
+                )
+                return redirect(
+                    url_for("main.edit_workout", workout_id=workout_id)
+                )
     return render_template("create_workout.html")
 
 
@@ -403,7 +483,7 @@ def edit_workout(workout_id):
                 num_reps,
                 num_rest,
                 notes,
-                workout_order
+                workout_order,
             )
 
     selected_exercises = get_exercises_for_workout(workout_id)
@@ -437,8 +517,11 @@ def search_exercises():
 
     if request.method == "POST":
         muscle = request.form.get("muscle")
+        exercise_search_name = request.form.get("exercise_search_name")
         if muscle == "All":
             exercises = get_all_exercises_with_muscles()
+        elif exercise_search_name:
+            exercises = get_similar_exercises_by_name(exercise_search_name)
         else:
             exercises = get_all_exercises_by_muscles(muscle)
         redirect(url_for("main.search_exercises", muscle=muscle))
@@ -453,19 +536,12 @@ def search_exercises():
 @login_required
 def search_workouts():
     """Search workouts page."""
-    db_utils = SqliteUtilites(DATABASE_NAME)
-
     if request.method == "POST":
         workout_name = sanitize_input(request.form.get("workout_name"))
         if not workout_name:
             workouts = get_all_workouts_with_author_names()
         else:
-            workouts = db_utils.execute(
-                "SELECT a.name, a.description, a.id, a.created, b.name AS author FROM"
-                " workouts a JOIN users b ON a.user_id = b.id"
-                f" WHERE a.name LIKE '%{workout_name}%'",
-                fetch_all=True,
-            )
+            workouts = get_similar_workout_by_name(workout_name)
         redirect(url_for("main.search_workouts", workouts=workouts))
     else:
         workouts = get_all_workouts_with_author_names()
@@ -480,7 +556,7 @@ def exercise(exercise_id):
     exercise_artifact = get_exercise(exercise_id)
 
     if request.method == "POST":
-        like_exercise(current_user.id, exercise_artifact['name'])
+        like_exercise(current_user.id, exercise_artifact["name"])
         flash(
             f"{exercise_artifact['name']} has been added to your Liked"
             " Exercises"
@@ -496,7 +572,7 @@ def workout(workout_id):
     workout_artifact = get_workout(workout_id)
 
     if request.method == "POST":
-        like_workout(current_user.id, workout_artifact['name'])
+        like_workout(current_user.id, workout_artifact["name"])
         flash(
             f"{workout_artifact['name']} has been added to your Liked Workouts"
         )
@@ -633,25 +709,14 @@ def edit(id):
             muscle_id = get_muscle_id_for_muscle(muscle)
 
             if not image:
-                update_exercise(
-                    name,
-                    muscle_id,
-                    id,
-                    description
-                )
+                update_exercise(name, muscle_id, id, description)
             else:
                 image_path = os.path.join(
                     "static/images/", secure_filename(image.filename)
                 )
                 image.save(image_path)
 
-                update_exercise(
-                    name,
-                    muscle_id,
-                    id,
-                    description,
-                    image_path
-                )
+                update_exercise(name, muscle_id, id, description, image_path)
 
             return redirect(url_for("main.search_exercises"))
 
@@ -666,6 +731,7 @@ def edit_workout_exercise(id):
     """Edit exercise in a given workout page."""
     exercise_artifact = get_selected_exercise(id)
     workout_id = exercise_artifact["WorkoutID"]
+    workout_exercise_id = exercise_artifact["id"]
 
     if request.method == "POST":
         num_sets = request.form.get("num_sets", 0)
@@ -673,12 +739,8 @@ def edit_workout_exercise(id):
         num_rest = request.form.get("num_rest", 0)
         notes = request.form.get("notes", 0)
 
-        update_workout(
-            workout_id,
-            num_reps,
-            num_sets,
-            num_rest,
-            notes
+        update_workout_exercise(
+            workout_exercise_id, num_reps, num_sets, num_rest, notes
         )
         return redirect(url_for("main.edit_workout", workout_id=workout_id))
     return render_template(
