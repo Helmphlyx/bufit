@@ -129,7 +129,7 @@ def delete_exercise(exercise_id: int):
     """Delete exercise in exercise table."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(
-        f"DELETE FROM workout_exercises WHERE id = ?",
+        f"DELETE FROM exercises WHERE id = ?",
         params=(exercise_id,),
         commit=True,
     )
@@ -289,7 +289,7 @@ def delete_workout_by_id(workout_id: int):
     """Delete workout from workout table."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(
-        f"DELETE FROM workout_exercises WHERE id = ?",
+        f"DELETE FROM workouts WHERE id = ?",
         params=(workout_id,),
         commit=True,
     )
@@ -361,7 +361,7 @@ def delete_workout_exercise_by_id(workout_exercise_id: int):
     """Delete exercise from workout."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(
-        f"DELETE FROM workouts WHERE id = ?",
+        f"DELETE FROM workout_exercises WHERE id = ?",
         params=(workout_exercise_id,),
         commit=True,
     )
