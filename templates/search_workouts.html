@@ -36,9 +36,11 @@
             </div>
         </a>
         <div class = "card-details">
+            {% if current_user.access > 1 %}
             <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('main.edit_workout', workout_id=workout['id']) }}">
                 <i class="bi bi-pencil"></i>
             </a>
+            {% endif %}
             <!-- TODO: Like button logic-->
             <a type = "button" class = "btn-sm btn-outline-danger">
                 <i class = "bi bi-heart text-danger"></i>

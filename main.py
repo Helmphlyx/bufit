@@ -8,7 +8,8 @@ from werkzeug.utils import secure_filename
 from sqlite_utilities import SqliteUtilites
 from flask import Blueprint
 from flask_login import login_required, current_user
-from models import User
+
+from models import User, requires_access_level, ACCESS
 
 from settings import settings
 
@@ -225,6 +226,18 @@ def get_liked_workout(user_id: int):
     return liked_workouts
 
 
+def get_user_workouts(user_id: int):
+    """Get all workouts created by a given user id."""
+    db_utils = SqliteUtilites(DATABASE_NAME)
+    liked_workouts = db_utils.execute(
+        f"SELECT * FROM workouts WHERE user_id = ?",
+        params=(user_id,),
+        fetch_all=True,
+    )
+
+    return liked_workouts
+
+
 def like_workout(user_id: int, workout_name: str):
     """Like a workout."""
     db_utils = SqliteUtilites(DATABASE_NAME)
@@ -400,6 +413,7 @@ def home():
 
 @main.route("/create_exercise", methods=("GET", "POST"))
 @login_required
+@requires_access_level(ACCESS["superuser"])
 def create_exercise():
     """Create exercise page."""
     muscles = get_all_muscles()
@@ -467,6 +481,10 @@ def edit_workout(workout_id):
     selected_workout = get_workout(workout_id)
     exercises = db_utils.execute("SELECT * FROM exercises", fetch_all=True)
 
+    if selected_workout["user_id"] != current_user.id:
+        if current_user.access < ACCESS["admin"]:
+            return redirect(url_for("main.home"))
+
     if request.method == "POST":
         exercise_id = request.form.get("exercise")
         num_sets = request.form.get("num_sets", 0)
@@ -500,11 +518,15 @@ def edit_workout(workout_id):
 @login_required
 def library():
     """User's library page."""
+    user_workouts = get_user_workouts(current_user.id)
     exercises = get_liked_exercises(current_user.id)
-    workouts = get_liked_workout(current_user.id)
+    liked_workouts = get_liked_workout(current_user.id)
 
     return render_template(
-        "library.html", exercises=exercises, workouts=workouts
+        "library.html",
+        user_workouts=user_workouts,
+        exercises=exercises,
+        liked_workouts=liked_workouts,
     )
 
 
@@ -692,6 +714,7 @@ def edit_workout_description(workout_id):
 
 @main.route("/<int:id>/edit", methods=("GET", "POST"))
 @login_required
+@requires_access_level(ACCESS["superuser"])
 def edit(id):
     """Edit exercise page."""
     exercise_artifact = get_exercise(id)
@@ -750,6 +773,7 @@ def edit_workout_exercise(id):
 
 @main.route("/<int:id>/delete", methods=("POST",))
 @login_required
+@requires_access_level(ACCESS["superuser"])
 def delete(id: int):
     """Handles deleting exercise."""
     exercise_artifact = get_exercise(id)
