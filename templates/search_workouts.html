@@ -21,7 +21,11 @@
                 <h4>{{ workout['name'] }}</h4>
             </div>
             <div>
-                <p>{{ workout['description'] }}</p>
+                {% if workout['description']|length < 60 %} 
+                <p>{{ workout['description'] }} </p>
+                {% else %}
+                <p>{{workout['description'][:60]}}...</p>
+                {% endif %}
             </div> 
         </a>
         <div class = "card-details">

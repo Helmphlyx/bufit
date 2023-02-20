@@ -1,50 +1,67 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div>
-    <h1>{% block title %} Edit "{{ exercise['name'] }}" {% endblock %}</h1>
+<body>
+    <style>
+        body{
+            background-image: linear-gradient(45deg,
+            rgba(245, 69, 66, 0.408),
+            rgba(8, 82, 156, 0.341)), url("../static/img/edit-exercise-img.jpg");
+            background-size: cover;
+            padding:0;
+            margin:0;
+        }
+        
+    </style>
+    <div class="edit-wrapper">
+        <div class = "detail-info">
+            <h2>{% block title %} Edit "{{ exercise['name'] }}" {% endblock %}</h2>
 
-    <form class = "" method="post" enctype = "multipart/form-data">
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" name="name" placeholder="Exercise Name"
-                class="form-control"
-                value="{{ request.form['name'] or exercise['name'] }}">
-            </input>
         </div>
-
-        <div class="form-group">
-            <label for="muscle">Target Muscle</label>
-            <select name=muscle class="form-control">
-                {% for muscle in muscles %}
-                <option value="{{muscle}}" SELECTED>{{muscle}}</option>"
-                {% endfor %}
-            </select>
+        <div class="detail-body">
+            <form class = "" method="post" enctype = "multipart/form-data">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" name="name" placeholder="Exercise Name"
+                        class="form-control"
+                        value="{{ request.form['name'] or exercise['name'] }}">
+                    </input>
+                </div>
+        
+                <div class="form-group">
+                    <label for="muscle">Target Muscle</label>
+                    <select name=muscle class="form-control">
+                        {% for muscle in muscles %}
+                        <option value="{{muscle}}" SELECTED>{{muscle}}</option>"
+                        {% endfor %}
+                    </select>
+                </div>
+        
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea name="description" placeholder="Exercise Description"
+                            class="form-control">{{ request.form['description'] or exercise['description'] }}</textarea>
+                </div>
+        
+                <div class="form-group">
+                    <label for='image'>Image</label>
+                    <input type = "file" name = "image" />
+                </div>
+        
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+            <hr>
+        
+            <form action="{{ url_for('main.delete', id=exercise['id']) }}" method="POST">
+                <input type="submit" value="Delete Exercise"
+                    class="btn btn-danger btn-sm"
+                    onclick="return confirm('Are you sure you want to delete this exercise?')">
+            </form>
         </div>
-
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea name="description" placeholder="Exercise Description"
-                    class="form-control">{{ request.form['description'] or exercise['description'] }}</textarea>
-        </div>
-
-        <div class="form-group">
-            <label for='image'>Image</label>
-            <input type = "file" name = "image" />
-        </div>
-
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
-    </form>
-    <hr>
-
-    <form action="{{ url_for('main.delete', id=exercise['id']) }}" method="POST">
-        <input type="submit" value="Delete Exercise"
-            class="btn btn-danger btn-sm"
-            onclick="return confirm('Are you sure you want to delete this exercise?')">
-    </form>
-</div>
+    </div>
+</body>
 
 
 {% endblock %}
