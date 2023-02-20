@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<body>
+<style>
+
+</style>
+<div class="auth-box">
+    <h1>Create User</h1>
+    <div class="form-group">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div>
+                {{ messages[0] }}.
+            </div>
+        {% endif %}
+        {% endwith %}
+        <form method="POST" action="/create_user">
+            <div class="form-group">
+                <div class="control">
+                    <input class="form-control" type="email" name="email" placeholder="Email" autofocus="">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="control">
+                    <input class="form-control" type="text" name="name" placeholder="Username" autofocus="">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="control">
+                    <input class="form-control" type="password" name="password" placeholder="Password">
+                </div>
+            </div>
+
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" id="coach_toggle" name="coach_toggle">
+                <label  class="form-check-label" for="coach_toggle">Coach Privileges</label>
+            </div>
+
+
+            <div class="d-grid">
+                <div class="control">
+                    <button class="btn btn-danger btn-block">Create User</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+{% endblock %}
