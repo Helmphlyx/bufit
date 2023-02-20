@@ -20,7 +20,15 @@
             <p class="created-info">
                 Created on: <span class="badge badge-primary">{{ workout['created'] }}</span>
             </p>
-
+            {% if workout.coach_workout %}
+            <p class="created-info">
+                This is a workout curated by a coach.
+            </p>
+            {% else %}
+            <p class="created-info">
+                This is a user created workout.
+            </p>
+            {% endif %}
         </div>
     </div>
 

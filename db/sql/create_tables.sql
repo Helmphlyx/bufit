@@ -19,6 +19,7 @@ CREATE TABLE workouts (
    name TEXT NOT NULL,
    user_id INTEGER NOT NULL,
    description TEXT NOT NULL,
+   coach_workout INTEGER NOT NULL DEFAULT 0,
    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 

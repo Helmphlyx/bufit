@@ -181,7 +181,7 @@ def get_similar_workout_by_name(workout_name: str):
     """Get similar workout by name."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     workouts = db_utils.execute(
-        f"SELECT a.name, a.description, a.id, a.created, b.name AS author FROM"
+        f"SELECT a.name, a.description, a.id, a.created, a.coach_workout, b.name AS author FROM"
         f" workouts a JOIN users b ON a.user_id = b.id"
         f" WHERE a.name LIKE '%' || ? || '%'",
         params=(workout_name,),
@@ -206,7 +206,7 @@ def get_all_workouts_with_author_names():
     """Get all workouts with their author's name."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     workouts = db_utils.execute(
-        "SELECT a.name, a.description, a.id, a.created, b.name AS author FROM"
+        "SELECT a.name, a.description, a.id, a.created, a.coach_workout, b.name AS author FROM"
         " workouts a JOIN users b ON a.user_id = b.id",
         fetch_all=True,
     )
@@ -286,12 +286,13 @@ def update_workout_description(workout_id: int, description: str):
     return
 
 
-def create_new_workout(name: int, user_id: int, description: str):
+def create_new_workout(name: int, user_id: int, description: str, coach_flag: bool):
     """Create workout into workout table."""
     db_utils = SqliteUtilites(DATABASE_NAME)
+    coach_value = 1 if coach_flag else 0
     workout_id = db_utils.execute(
-        f"INSERT INTO workouts (name, user_id, description) VALUES (?, ?, ?)",
-        params=(name, user_id, description),
+        f"INSERT INTO workouts (name, user_id, description, coach_workout) VALUES (?, ?, ?, ?)",
+        params=(name, user_id, description, coach_value),
         row_id=True,
         commit=True,
     )
@@ -464,9 +465,13 @@ def create_workout():
                 description = sanitize_input(
                     request.form.get("description", "")
                 )
+
+                coach_flag = current_user.access > 0
+
                 workout_id = create_new_workout(
-                    name, current_user.id, description
+                    name, current_user.id, description, coach_flag
                 )
+
                 return redirect(
                     url_for("main.edit_workout", workout_id=workout_id)
                 )

@@ -14,13 +14,25 @@
     {% for workout in user_workouts %}
     <div class= "card-wrapper">
         <a class = "card-content" href="{{ url_for('main.workout', workout_id=workout['id']) }}">
-            <div class = "card-img">
-                image
-            </div>
-            <div>
-                <h4>{{ workout['name'] }}</h4>
-                <p>Author: {{ workout['author'] }}</p>
-            </div>
+            {% if workout.coach_workout %}
+                <div class = "card-img">
+                    <img style="max-height:100%;max-width:100%;object-fit:contain;" src="static/img/coach.png">
+                </div>
+                <div>
+                    <h4>{{ workout['name'] }}</h4>
+                    <p>Coach: {{ workout['author'] }}</p>
+                    <p>{{ workout['description'] }}</p>
+                </div>
+            {% else %}
+                <div class = "card-img">
+                    <img style="max-height:100%;max-width:100%;object-fit:contain;" src="static/img/student.png">
+                </div>
+                <div>
+                    <h4>{{ workout['name'] }}</h4>
+                    <p>Author: {{ workout['author'] }}</p>
+                    <p>{{ workout['description'] }}</p>
+                </div>
+            {% endif %}
         </a>
         <div class = "card-details">
             <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('main.edit_workout', workout_id=workout['id']) }}">
@@ -72,13 +84,25 @@
     {% for workout in liked_workouts %}
     <div class= "card-wrapper">
         <a class = "card-content" href="{{ url_for('main.workout', workout_id=workout['id']) }}">
-            <div class = "card-img">
-                image
-            </div>
-            <div>
-                <h4>{{ workout['name'] }}</h4>
-                <p>Author: {{ workout['author'] }}</p>
-            </div>
+            {% if workout.coach_workout %}
+                <div class = "card-img">
+                    <img style="max-height:100%;max-width:100%;object-fit:contain;" src="static/img/coach.png">
+                </div>
+                <div>
+                    <h4>{{ workout['name'] }}</h4>
+                    <p>Coach: {{ workout['author'] }}</p>
+                    <p>{{ workout['description'] }}</p>
+                </div>
+            {% else %}
+                <div class = "card-img">
+                    <img style="max-height:100%;max-width:100%;object-fit:contain;" src="static/img/student.png">
+                </div>
+                <div>
+                    <h4>{{ workout['name'] }}</h4>
+                    <p>Author: {{ workout['author'] }}</p>
+                    <p>{{ workout['description'] }}</p>
+                </div>
+            {% endif %}
         </a>
         <div class = "card-details">
             <!-- TODO: Like button logic-->

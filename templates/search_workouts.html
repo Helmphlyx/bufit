@@ -26,14 +26,26 @@
     {% for workout in workouts %}
     <div class= "card-wrapper">
         <a class = "card-content" href="{{ url_for('main.workout', workout_id=workout['id']) }}">
-            <div class = "card-img">
-                image
-            </div>
-            <div>
-                <h4>{{ workout['name'] }}</h4>
-                <p>Author: {{ workout['author'] }}</p>
-                <p>{{ workout['description'] }}</p>
-            </div>
+            {% if workout.coach_workout %}
+                <div class = "card-img">
+                    <img style="max-height:100%;max-width:100%;object-fit:contain;" src="static/img/coach.png">
+                </div>
+                <div>
+                    <h4>{{ workout['name'] }}</h4>
+                    <p>Coach: {{ workout['author'] }}</p>
+                    <p>{{ workout['description'] }}</p>
+                </div>
+            {% else %}
+                <div class = "card-img">
+                    <img style="max-height:100%;max-width:100%;object-fit:contain;" src="static/img/student.png">
+                </div>
+                <div>
+                    <h4>{{ workout['name'] }}</h4>
+                    <p>Author: {{ workout['author'] }}</p>
+                    <p>{{ workout['description'] }}</p>
+                </div>
+            {% endif %}
+
         </a>
         <div class = "card-details">
             {% if current_user.access > 1 %}
