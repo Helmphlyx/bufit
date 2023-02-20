@@ -1,17 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+     <div class="alert alert-warning">
+                {{ messages[0] }}.
+            </div>
+        {% endif %}
+        {% endwith %}
+</div>
+
 <div class="detail-wrapper">
     <div class="detail-img">
-        <!-- TODO: EXERCISE IMAGE -->
         <img style="max-height:100%;max-width:100%;object-fit:contain;" src="{{exercise['image_url']}}" class = "img-fluid" alt = "{{exercise['name']}}" onError="this.onerror=null;this.src='static/img/example-exercise-img.jpg';"/>
     </div>
     <div class="detail-info">
         <div class="detail-info-header">
             <h2>{% block name %} {{ exercise['name'] }} {% endblock %}</h2>
             <form method="post">
-                <!-- TODO UNLIKE LOGIC -->
-                <button type = "button"  class = "btn btn-lg btn-danger">
+                <button type="submit" class="btn btn-danger btn-lg">
                     <i class = "bi bi-heart"></i>
                 </button>
             </form>

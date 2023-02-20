@@ -91,7 +91,9 @@ def get_liked_exercises(user_id: int):
     """Get all liked exercises by a given user id."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     liked_exercises = db_utils.execute(
-        f"SELECT * FROM exercises WHERE name IN ( SELECT exercise FROM"
+        "SELECT e.id, e.name, e.description, e.created, e.image_url,"
+        " m.muscle, m.muscle_latin FROM exercises e JOIN muscles m on"
+        " e.muscle = m.id WHERE e.id IN ( SELECT exercise FROM"
         f" exercise_likes WHERE user_id = ?)",
         params=(user_id,),
         fetch_all=True,
@@ -100,19 +102,42 @@ def get_liked_exercises(user_id: int):
     return liked_exercises
 
 
-def like_exercise(user_id: int, exercise_name: str):
-    """Get all liked exercises by a given user id."""
+def like_exercise(user_id: int, exercise_id: str):
+    """Like an exercise."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(
         f"INSERT INTO exercise_likes (user_id, exercise) VALUES (?, ?)",
-        params=(user_id, exercise_name),
+        params=(user_id, exercise_id),
         commit=True,
     )
     return
 
 
+def unlike_exercise(user_id: int, exercise_id: int):
+    """Unlike an exercise"""
+    db_utils = SqliteUtilites(DATABASE_NAME)
+    db_utils.execute(
+        f"DELETE FROM exercise_likes WHERE user_id = ? and exercise = ?",
+        params=(user_id, exercise_id),
+        commit=True,
+    )
+    return
+
+
+def count_liked_exercise(user_id: int, exercise_id: int):
+    """Get count of a liked exercises."""
+    db_utils = SqliteUtilites(DATABASE_NAME)
+
+    count = db_utils.execute(
+        f"SELECT COUNT(id) FROM exercise_likes WHERE user_id = ? and exercise = ?",
+        params=(user_id, exercise_id),
+    )[0]
+
+    return count
+
+
 def create_new_exercise(
-    name: str, muscle_id: str, description: str, image_path: str
+        name: str, muscle_id: str, description: str, image_path: str
 ):
     """Create exercise into exercise table."""
     db_utils = SqliteUtilites(DATABASE_NAME)
@@ -138,11 +163,11 @@ def delete_exercise(exercise_id: int):
 
 
 def update_exercise(
-    name: str,
-    muscle_id: str,
-    exercise_id: int,
-    description: str,
-    image_path: Optional[str] = None,
+        name: str,
+        muscle_id: str,
+        exercise_id: int,
+        description: str,
+        image_path: Optional[str] = None,
 ):
     """Update exercise in exercise table."""
     db_utils = SqliteUtilites(DATABASE_NAME)
@@ -217,7 +242,7 @@ def get_liked_workout(user_id: int):
     """Get all liked workouts by a given user id."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     liked_workouts = db_utils.execute(
-        f"SELECT * FROM workouts WHERE name IN ( SELECT workout FROM"
+        f"SELECT * FROM workouts WHERE id IN ( SELECT workout FROM"
         f" workout_likes WHERE user_id = ?)",
         params=(user_id,),
         fetch_all=True,
@@ -238,19 +263,42 @@ def get_user_workouts(user_id: int):
     return liked_workouts
 
 
-def like_workout(user_id: int, workout_name: str):
+def like_workout(user_id: int, workout_id: int):
     """Like a workout."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute(
-        f"INSERT INTO exercise_likes (user_id, exercise) VALUES (?, ?)",
-        params=(user_id, workout_name),
+        f"INSERT INTO workout_Likes (user_id, workout) VALUES (?, ?)",
+        params=(user_id, workout_id),
+        commit=True,
+    )
+    return
+
+
+def count_liked_workout(user_id: int, workout_id: int):
+    """Get count of a liked workout."""
+    db_utils = SqliteUtilites(DATABASE_NAME)
+
+    count = db_utils.execute(
+        f"SELECT COUNT(id) FROM workout_Likes WHERE user_id = ? and workout = ?",
+        params=(user_id, workout_id),
+    )[0]
+
+    return count
+
+
+def unlike_workout(user_id: int, workout_id: int):
+    """Unlike a workout."""
+    db_utils = SqliteUtilites(DATABASE_NAME)
+    db_utils.execute(
+        f"DELETE FROM workout_Likes WHERE user_id = ? and workout = ?",
+        params=(user_id, workout_id),
         commit=True,
     )
     return
 
 
 def update_workout_exercise(
-    workout_id: int, num_reps, num_sets: int, num_rest: int, notes: str
+        workout_id: int, num_reps, num_sets: int, num_rest: int, notes: str
 ):
     """Update exercise in workout_exercises table."""
     db_utils = SqliteUtilites(DATABASE_NAME)
@@ -341,13 +389,13 @@ def get_exercises_for_workout(workout_id: int):
 
 
 def create_exercise_for_workout(
-    workout_id: int,
-    exercise_id: str,
-    num_sets: int,
-    num_reps: int,
-    num_rest: int,
-    notes: str,
-    workout_order: int,
+        workout_id: int,
+        exercise_id: str,
+        num_sets: int,
+        num_reps: int,
+        num_rest: int,
+        notes: str,
+        workout_order: int,
 ):
     """Create exercise for a given workout ID."""
     db_utils = SqliteUtilites(DATABASE_NAME)
@@ -583,12 +631,21 @@ def exercise(exercise_id):
     exercise_artifact = get_exercise(exercise_id)
 
     if request.method == "POST":
-        like_exercise(current_user.id, exercise_artifact["name"])
-        flash(
-            f"{exercise_artifact['name']} has been added to your Liked"
-            " Exercises"
-        )
-        return redirect(url_for("main.home"))
+        liked_count = count_liked_exercise(current_user.id, exercise_id)
+
+        if liked_count == 0:
+            like_exercise(current_user.id, exercise_id)
+            flash(
+                f"{exercise_artifact['name']} has been added to your Liked"
+                " Exercises"
+            )
+        else:
+            unlike_exercise(current_user.id, exercise_id)
+            flash(
+                f"{exercise_artifact['name']} has been removed from your Liked"
+                " Exercises"
+            )
+
     return render_template("exercise.html", exercise=exercise_artifact)
 
 
@@ -598,16 +655,23 @@ def workout(workout_id):
     """Workout page."""
     workout_artifact = get_workout(workout_id)
 
-    if request.method == "POST":
-        like_workout(current_user.id, workout_artifact["name"])
-        flash(
-            f"{workout_artifact['name']} has been added to your Liked Workouts"
-        )
-        return redirect(url_for("main.home"))
-
     selected_exercises = get_exercises_for_workout(workout_id)
-
     author = User.query.filter(User.id == workout_artifact["user_id"]).first()
+
+    if request.method == "POST":
+        liked_count = count_liked_workout(current_user.id, workout_id)
+
+        if liked_count == 0:
+            like_workout(current_user.id, workout_id)
+            flash(
+                f"{workout_artifact['name']} has been added to your Liked Workouts"
+            )
+        else:
+            unlike_workout(current_user.id, workout_id)
+            flash(
+                f"{workout_artifact['name']} has been removed from your Liked Workouts"
+            )
+
     return render_template(
         "workout.html",
         workout=workout_artifact,
