@@ -1,18 +1,35 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{% block title %} Edit {{ workout['name'] }}'s Description {% endblock %}</h1>
-
-<form method="post">
-    <div class="form-group">
-        <label for="description">Content</label>
-        <textarea name="description" placeholder="Workout Description"
-                  class="form-control">{{ request.form['description'] or workout['description'] }}</textarea>
+<body>
+    <style>
+        body{
+            background-image: linear-gradient(45deg,
+            rgba(245, 69, 66, 0.408),
+            rgba(8, 82, 156, 0.341)), url("../static/img/edit-img.jpg");
+            background-size: cover;
+            padding:0;
+            margin:0;
+        }
+        
+    </style>
+    <div class = "workout-wrapper">
+        <div class = "detail-info">
+            <h2>{% block title %} Edit {{ workout['name'] }}'s Description {% endblock %}</h2>
+        </div>
+        <div class = "detail-body">
+            <form method="post">
+                <div class="form-group">
+                    <label for="description">Content</label>
+                    <textarea name="description" placeholder="Workout Description"
+                              class="form-control">{{ request.form['description'] or workout['description'] }}</textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
-</form>
-<hr>
+</body>
 
 {% endblock %}

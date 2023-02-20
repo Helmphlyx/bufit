@@ -97,13 +97,14 @@ h1 {
 }
 .detail-body {
     background-color: rgba(255, 255, 255, 0.841);
+    padding: 20px;
+    border-top: 15px double #dc3545;
 }
 .add-exercises {
     padding: 0 30px 30px 30px;
 }
 .exercises-list {
-    border-top: 15px double #dc3545;
-    padding: 20px;
+    
     display: flex;
     flex-direction: column;
     align-items: center;
