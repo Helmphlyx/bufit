@@ -79,7 +79,7 @@ def get_similar_exercises_by_name(exercise_name: str):
     exercises = db_utils.execute(
         f"SELECT e.id, e.name, e.description, e.created, e.image_url,"
         f" m.muscle, m.muscle_latin FROM exercises e JOIN muscles m on"
-        f" e.muscle = m.id WHERE e.name LIKE ?",
+        f" e.muscle = m.id WHERE upper(e.name) LIKE upper('%' || ? || '%')",
         params=(exercise_name,),
         fetch_all=True,
     )
