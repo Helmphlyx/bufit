@@ -48,7 +48,8 @@
                                 <th scope = "col">Exercise</th>
                                 <th scope = "col">Sets</th>
                                 <th scope = "col">Reps</th>
-                                <th scope = "col">Rest between Sets</th>
+                                <th scope = "col">Rest</th>
+                                <th scope = "col">Notes</th>
                                 <th scope = "col"></th>
                                 <th scope = "col"></th>
                             </tr>
@@ -70,6 +71,13 @@
                                 </td>
                                 <td>
                                     {{exercise['num_rest']}}
+                                </td>
+                                <td>
+                                    {% if not exercise['notes']%}
+                                    No notes.
+                                    {% else %}
+                                    {{exercise['notes']}}
+                                    {% endif %}
                                 </td>
                                 <td>
                                     <a class="btn btn-warning btn-sm" href="{{ url_for('main.edit_workout_exercise', id=exercise['WorkoutExerciseID']) }}">

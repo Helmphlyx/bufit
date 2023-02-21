@@ -48,7 +48,7 @@ def get_exercises_for_workout(workout_id: int):
     """Get exercises for a given workout ID."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     selected_exercises_artifact = db_utils.execute(
-        "SELECT a.id, a.name, a.muscle, b.num_sets, b.num_reps, b.num_rest,"
+        "SELECT a.id, a.name, a.muscle, b.num_sets, b.num_reps, b.num_rest, b.notes,"
         " b.id AS WorkoutExerciseID FROM workout_exercises b JOIN exercises a"
         f" ON a.id = b.ExercisesID AND b.WorkoutID = {workout_id} ORDER BY"
         " b.exercise_order",
@@ -165,7 +165,7 @@ def edit_workout(workout_id):
         num_sets = request.form.get("num_sets", 0)
         num_reps = request.form.get("num_reps", 0)
         num_rest = request.form.get("num_rest", 0)
-        notes = request.form.get("notes", 0)
+        notes = request.form.get("notes")
         workout_order = len(selected_workout)
 
         if exercise_id:
