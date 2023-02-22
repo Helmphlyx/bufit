@@ -60,15 +60,13 @@
                 <p>Muscle: {{ exercise['muscle'] }}</p>
             </div>
         </a>
+        {% if current_user.access > 0 %}
         <div class = "card-details">
             <a type = "button" class = "btn-sm btn-bd-warning" href="{{ url_for('main.edit', id=exercise['id']) }}">
                 <i class="bi bi-pencil-fill"></i>
             </a>
-             <!-- TODO: UNLIKE button logic-->
-             <a type = "button"  class = "btn-sm btn-bd-danger">
-                <i class = "bi bi-heart-fill text-danger"></i>
-            </a>
         </div>
+        {% endif %}
     </div>
     {% endfor %}
 </div>
@@ -101,7 +99,11 @@
             {% endif %}
         </a>
         <div class = "card-details">
-
+            {% if current_user.access > 1 %}
+            <a type = "button" class = "btn-sm btn-bd-warning" href="{{ url_for('main.edit_workout', workout_id=workout['id']) }}">
+                <i class="bi bi-pencil-fill"></i>
+            </a>
+            {% endif %}
         </div>
     </div>
 
