@@ -47,8 +47,8 @@
         </a>
         <div class = "card-details">
             {% if current_user.access > 0 %}
-            <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('main.edit', id=exercise['id']) }}">
-                <i class="bi bi-pencil"></i>
+            <a type = "button" class = "btn btn-sm btn-bd-warning m-1" href="{{ url_for('main.edit', id=exercise['id']) }}">
+                <i class="bi bi-pencil-fill"></i>
             </a>
             {% endif %}
         </div>

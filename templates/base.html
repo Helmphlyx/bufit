@@ -1,4 +1,4 @@
-{% from "macros.html" import page_title with context %}
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -143,20 +143,59 @@
     {% block content %} {% endblock %}
 </div>
 <footer class="footer">
-
-    <div>
-        <ul>
-            <li>
-                contact
-            </li>
-        </ul>
+    <div class = "d-flex justify-content-between my-3">
+        <div class="bufit-description">
+            <h5>
+                BUfit
+            </h5>
+            <p>
+                This web application is designed to help BU students reach their fitness goals within their busy schedules. 
+                Students can create their own workout routines and share with the community.
+            </p>
+        </div>
+        <div>
+            <ul>
+                <li>
+                    <h5>
+                        Contact
+                    </h5>
+                    
+                </li>
+                <li>
+                    bufit@bu.edu
+                </li>
+                <li>
+                    <a href="https://github.com/Helmphlyx/bufit">
+                        GitHub repo
+                    </a>
+                </li>
+    
+            </ul>
+        </div>
+        {% if current_user.is_authenticated %}
+        <a class="navbar-brand" href="{{ url_for('main.home')}}"><img src="../static/img/logo.png" class = "logo" alt = "BU Fit"/></a>
+        {% endif %}
+        {% if not current_user.is_authenticated %}
+        <a class="navbar-brand" href="{{ url_for('auth.login')}}"><img src="../static/img/logo.png" class = "logo" alt = "BU Fit"/></a>
+        {% endif %}
     </div>
-    {% if current_user.is_authenticated %}
-    <a class="navbar-brand" href="{{ url_for('main.home')}}"><img src="../static/img/logo.png" class = "logo" alt = "BU Fit"/></a>
-    {% endif %}
-    {% if not current_user.is_authenticated %}
-    <a class="navbar-brand" href="{{ url_for('auth.login')}}"><img src="../static/img/logo.png" class = "logo" alt = "BU Fit"/></a>
-    {% endif %}
+    <div class="social-media my-3">
+
+        <i class="bi bi-instagram mx-3" style="font-size: 2rem;"></i>
+        <i class="bi bi-facebook mx-3" style="font-size: 2rem;"></i>
+        <i class="bi bi-github mx-3" style="font-size: 2rem;"></i>
+        <i class="bi bi-twitter mx-3" style="font-size: 2rem;"></i>
+    </div>
+    <div>
+        <p>
+            <strong>
+                BU MET CS633 - Team 5 - BUFit © 2023
+            </strong>
+            
+        </p>
+    </div>
+   
+
 </footer>
 
 <!-- Optional JavaScript -->

@@ -25,7 +25,7 @@
     {% endif%}
     {% for workout in workouts %}
     <div class= "card-wrapper">
-        <a class = "card-content" href="{{ url_for('main.workout', workout_id=workout['id']) }}">
+        <a class = "card-content card-content-workout" href="{{ url_for('main.workout', workout_id=workout['id']) }}">
             {% if workout.coach_workout %}
                 <div class = "card-img">
                     <img style="max-height:100%;max-width:100%;object-fit:contain;" src="static/img/coach.png">
@@ -33,7 +33,11 @@
                 <div>
                     <h4>{{ workout['name'] }}</h4>
                     <p>Coach: {{ workout['author'] }}</p>
-                    <p>{{ workout['description'] }}</p>
+                    {% if workout['description']|length < 60 %} 
+                    <p>{{ workout['description'] }} </p>
+                    {% else %}
+                    <p>{{workout['description'][:60]}}...</p>
+                    {% endif %}                
                 </div>
             {% else %}
                 <div class = "card-img">
@@ -42,15 +46,19 @@
                 <div>
                     <h4>{{ workout['name'] }}</h4>
                     <p>Author: {{ workout['author'] }}</p>
-                    <p>{{ workout['description'] }}</p>
+                    {% if workout['description']|length < 60 %} 
+                    <p>{{ workout['description'] }} </p>
+                    {% else %}
+                    <p>{{workout['description'][:60]}}...</p>
+                    {% endif %}
                 </div>
             {% endif %}
 
         </a>
         <div class = "card-details">
             {% if current_user.access > 1 %}
-            <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('main.edit_workout', workout_id=workout['id']) }}">
-                <i class="bi bi-pencil"></i>
+            <a type = "button" class = "btn-sm btn-bd-warning" href="{{ url_for('main.edit_workout', workout_id=workout['id']) }}">
+                <i class="bi bi-pencil-fill"></i>
             </a>
             {% endif %}
         </div>
