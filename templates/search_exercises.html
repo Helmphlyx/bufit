@@ -23,6 +23,15 @@
     </div>
 </form>
 
+<form  class  = "form-inline" method="POST" action="{{ url_for('main.search_exercises') }}">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" id = "exercise_search_name" name = "exercise_search_name" placeholder="Search exercise name..." aria-label="search" aria-describedby="button-addon2">
+        <button class="btn btn-primary" type="submit" id="button-addon2">
+            <i class="bi bi-search"></i>
+            <span class="ms-2">Search</span>
+        </button>
+    </div>
+</form>
 
 <div class="cards-section-wrapper">
     {% for exercise in exercises %}
