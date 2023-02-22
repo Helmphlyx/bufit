@@ -27,25 +27,29 @@
     {% endif%}
     {% for workout in workouts %}
     <div class= "card-wrapper">
-        <a class = "card-content" href="{{ url_for('main.workout', workout_id=workout['id']) }}">
-            <div class = "card-img">
-                image
-            </div>
+        <a class = "card-content card-content-workout" href="{{ url_for('main.workout', workout_id=workout['id']) }}">
             <div>
                 <h4>{{ workout['name'] }}</h4>
-                <p>Author: {{ workout['author'] }}</p>
-                <p>{{ workout['description'] }}</p>
             </div>
+            <div>
+                {% if workout['description']|length < 60 %} 
+                <p>{{ workout['description'] }} </p>
+                {% else %}
+                <p>{{workout['description'][:60]}}...</p>
+                {% endif %}
+            </div> 
         </a>
         <div class = "card-details">
-            <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('main.edit_workout', workout_id=workout['id']) }}">
-                <i class="bi bi-pencil"></i>
+            <a type = "button" class = "btn-sm btn-bd-warning" href="{{ url_for('main.edit_workout', workout_id=workout['id']) }}">
+                <i class="bi bi-pencil-fill"></i>
             </a>
-            <!-- TODO: Like button logic-->
-            <a type = "button" class = "btn-sm btn-outline-danger">
-                <i class = "bi bi-heart text-danger"></i>
-            </a>
-
+            
+            <form action="{{ url_for('main.workout', workout_id=workout['id']) }}" method="post">
+                <button type="submit" class="btn btn-bd-danger btn-sm">
+                    <i class = "bi bi-heart"></i>
+                </button>
+            </form>
+            <!-- TODO: unlike logic-->
         </div>
     </div>
 

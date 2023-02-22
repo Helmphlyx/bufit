@@ -37,13 +37,15 @@
             </div>
         </a>
         <div class = "card-details">
-            <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('main.edit', id=exercise['id']) }}">
-                <i class="bi bi-pencil"></i>
+            <a type = "button" class = "btn btn-sm btn-bd-warning m-1" href="{{ url_for('main.edit', id=exercise['id']) }}">
+                <i class="bi bi-pencil-fill"></i>
             </a>
-             <!-- TODO: Like button logic-->
-             <a type = "button"  class = "btn-sm btn-outline-danger">
-                <i class = "bi bi-heart text-danger"></i>
-            </a>
+             <!-- TODO: unlike button logic-->
+             <form action="{{ url_for('main.exercise', exercise_id=exercise['id']) }}" method="post" class = "m-1">
+                <button type="submit" class="btn btn-sm btn-bd-danger">
+                    <i class = "bi bi-heart"></i>
+                </button>
+            </form>
         </div>
     </div>
     {% endfor %}

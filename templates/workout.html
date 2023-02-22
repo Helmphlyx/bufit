@@ -1,45 +1,114 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<div class="workout-wrapper">
-    <div class="detail-info">
-        <div class="detail-info-header">
-            <h2>{% block name %} {{ workout['name'] }} {% endblock %}</h2>
-            <h3>{% block author %} {{ author }} {% endblock %}</h3>
-            <form method="post">
-
-                <button type="submit" class="btn btn-danger btn-lg">
-                    <i class = "bi bi-heart"></i>
-                </button>
-
-            </form>
+<body>
+    <style>
+        body{
+            background-image: linear-gradient(45deg,
+            rgba(245, 69, 66, 0.408),
+            rgba(8, 82, 156, 0.341)), url("../static/img/workout-img.jpg");
+            background-size: cover;
+            padding:0;
+            margin:0;
+        }
+    </style>
+    <div class="workout-wrapper">
+        <div class="detail-info">
+            <div class="detail-info-header">
+                <h2>{% block title %} {{ workout['name'] }} {% endblock %}</h2>
+                
+                <form method="post">
+                    <button type="submit" class="btn btn-danger btn-lg">
+                        <i class = "bi bi-heart"></i>
+                    </button>
+                </form>
+            </div>
+            <div class="detail-info-body">
+                
+                <p>{{ workout['description'] }}</p>
+                <div class="created-info">
+                    <p>Author: <span style="color:white">{% block author %} {{ author }} {% endblock %}</span></p>
+                    <p>
+                        Created on: <span class="badge badge-primary">{{ workout['created'] }}</span>
+                    </p>
+                </div>
+    
+            </div>
         </div>
-        <div class="detail-info-body">
-            <p>{{ workout['description'] }}</p>
-            <p class="created-info">
-                Created on: <span class="badge badge-primary">{{ workout['created'] }}</span>
-            </p>
-
+        <div class="detail-body">
+            <div class = "exercises-list">
+                <h2>Exercises</h2>
+                {% if selected_exercises %}
+                
+                <div class="table-responsive m-3">
+                    <table class = "table table-light table-striped">
+                        <thead>
+                            <tr>
+                                <th scope = "col">#</th>
+                                <th scope = "col">Exercise</th>
+                                <th scope = "col">Sets</th>
+                                <th scope = "col">Reps</th>
+                                <th scope = "col">Rest</th>
+                                <th scope = "col">Notes</th>
+                                <th scope = "col"></th>
+                                <th scope = "col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for exercise in selected_exercises %}
+                            <tr>
+                                <th scope = "row">
+                                    {{ loop.index }}
+                                </th>
+                                <td>
+                                    {{exercise['name']}}
+                                </td>
+                                <td>
+                                    {{exercise['num_sets']}}
+                                </td>
+                                <td>
+                                    {{exercise['num_reps']}}
+                                </td>
+                                <td>
+                                    {{exercise['num_rest']}}
+                                </td>
+                                <td>
+                                    {% if not exercise['notes']%}
+                                    No notes.
+                                    {% else %}
+                                    {{exercise['notes']}}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a class="btn btn-warning btn-sm" href="{{ url_for('main.edit_workout_exercise', id=exercise['WorkoutExerciseID']) }}">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <form action="{{ url_for('main.delete_workout_exercise', id=exercise['WorkoutExerciseID']) }}" method="POST">
+                                        <button type="submit"
+                                               class="btn btn-danger btn-sm"
+                                               onclick="return confirm('Are you sure you want to delete this exercise?')">
+                                               <i class="bi bi-trash3-fill"></i> 
+                                        </button>
+                                               
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            
+                
+                
+                {% else %}
+                    <p>No exercises have been added.</p>
+                {% endif %}
+            </div>
         </div>
     </div>
+</body>
 
-    <div class = "exercises-list">
-        <h2>Exercises</h2>
-        {% if selected_exercises %}
-        {% for selected_exercise in selected_exercises %}
-            <a href="{{ url_for('main.exercise', exercise_id=selected_exercise['id']) }}">{{selected_exercise['name']}} </a>
-            <a>Sets: {{ selected_exercise['num_sets'] }}</a>
-            <a>Reps: {{ selected_exercise['num_reps'] }}</a>
-            <br>
-        {% endfor %}
-        {% else %}
-            <p>No exercises have been added.</p>
-        {% endif %}
-    </div>
-
-
-
-</div>
 
 {% endblock %}
