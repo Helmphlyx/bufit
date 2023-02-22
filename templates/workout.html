@@ -12,6 +12,17 @@
             margin:0;
         }
     </style>
+
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+     <div class="alert alert-warning">
+                {{ messages[0] }}.
+            </div>
+        {% endif %}
+        {% endwith %}
+    </div>
+
     <div class="workout-wrapper">
         <div class="detail-info">
             <div class="detail-info-header">
@@ -31,6 +42,15 @@
                     <p>
                         Created on: <span class="badge badge-primary">{{ workout['created'] }}</span>
                     </p>
+                    {% if workout.coach_workout %}
+                    <p class="created-info">
+                        This is a workout curated by a coach.
+                    </p>
+                    {% else %}
+                    <p class="created-info">
+                        This is a user created workout.
+                    </p>
+                    {% endif %}
                 </div>
     
             </div>
@@ -78,21 +98,6 @@
                                     {% else %}
                                     {{exercise['notes']}}
                                     {% endif %}
-                                </td>
-                                <td>
-                                    <a class="btn btn-warning btn-sm" href="{{ url_for('main.edit_workout_exercise', id=exercise['WorkoutExerciseID']) }}">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                </td>
-                                <td>
-                                    <form action="{{ url_for('main.delete_workout_exercise', id=exercise['WorkoutExerciseID']) }}" method="POST">
-                                        <button type="submit"
-                                               class="btn btn-danger btn-sm"
-                                               onclick="return confirm('Are you sure you want to delete this exercise?')">
-                                               <i class="bi bi-trash3-fill"></i> 
-                                        </button>
-                                               
-                                    </form>
                                 </td>
                             </tr>
                             {% endfor %}

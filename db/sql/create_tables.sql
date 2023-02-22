@@ -19,6 +19,7 @@ CREATE TABLE workouts (
    name TEXT NOT NULL,
    user_id INTEGER NOT NULL,
    description TEXT NOT NULL,
+   coach_workout INTEGER NOT NULL DEFAULT 0,
    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -43,7 +44,7 @@ CREATE TABLE exercise_likes (
 CREATE TABLE workout_likes (
    id INTEGER PRIMARY KEY AUTOINCREMENT,
    user_id INTEGER NOT NULL,
-   workout TEXT NOT NULL,
+   workout INTEGER NOT NULL,
    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 

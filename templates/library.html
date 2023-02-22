@@ -6,6 +6,44 @@
     <title>BUFit</title>
 </head>
 {% block content %}
+<h1 class = "library-title">Your Workouts</h1>
+<div class="cards-section-wrapper">
+    {% if not user_workouts %}
+    <p> You haven't created any workouts yet.</p>
+    {% endif%}
+    {% for workout in user_workouts %}
+    <div class= "card-wrapper">
+        <a class = "card-content" href="{{ url_for('main.workout', workout_id=workout['id']) }}">
+            {% if workout.coach_workout %}
+                <div class = "card-img">
+                    <img style="max-height:100%;max-width:100%;object-fit:contain;" src="static/img/coach.png">
+                </div>
+                <div>
+                    <h4>{{ workout['name'] }}</h4>
+                    <p>Coach: {{ workout['author'] }}</p>
+                    <p>{{ workout['description'] }}</p>
+                </div>
+            {% else %}
+                <div class = "card-img">
+                    <img style="max-height:100%;max-width:100%;object-fit:contain;" src="static/img/student.png">
+                </div>
+                <div>
+                    <h4>{{ workout['name'] }}</h4>
+                    <p>Author: {{ workout['author'] }}</p>
+                    <p>{{ workout['description'] }}</p>
+                </div>
+            {% endif %}
+        </a>
+        <div class = "card-details">
+            <a type = "button" class = "btn-sm btn-outline-danger" href="{{ url_for('main.edit_workout', workout_id=workout['id']) }}">
+                <i class="bi bi-pencil"></i>
+            </a>
+
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
 <h1 class = "library-title">{% block title %} Your liked Exercises {% endblock %}</h1>
 <div class="cards-section-wrapper">
     {% if not exercises %}
@@ -22,42 +60,50 @@
                 <p>Muscle: {{ exercise['muscle'] }}</p>
             </div>
         </a>
+        {% if current_user.access > 0 %}
         <div class = "card-details">
             <a type = "button" class = "btn-sm btn-bd-warning" href="{{ url_for('main.edit', id=exercise['id']) }}">
                 <i class="bi bi-pencil-fill"></i>
             </a>
-             <!-- TODO: UNLIKE button logic-->
-             <a type = "button"  class = "btn-sm btn-bd-danger">
-                <i class = "bi bi-heart-fill text-danger"></i>
-            </a>
         </div>
+        {% endif %}
     </div>
     {% endfor %}
 </div>
 <h1 class = "library-title">Your liked Workouts</h1>
 <div class="cards-section-wrapper">
-    {% if not workouts %}
+    {% if not liked_workouts %}
     <p> You haven't liked any workouts yet.</p>
     {% endif%}
-    {% for workout in workouts %}
+    {% for workout in liked_workouts %}
     <div class= "card-wrapper">
         <a class = "card-content card-content-workout" href="{{ url_for('main.workout', workout_id=workout['id']) }}">
-            <div>
-                <h4>{{ workout['name'] }}</h4>
-                <p>
-                    {{ workout['description'] }}
-                </p>
-            </div>
+            {% if workout.coach_workout %}
+                <div class = "card-img">
+                    <img style="max-height:100%;max-width:100%;object-fit:contain;" src="static/img/coach.png">
+                </div>
+                <div>
+                    <h4>{{ workout['name'] }}</h4>
+                    <p>Coach: {{ workout['author'] }}</p>
+                    <p>{{ workout['description'] }}</p>
+                </div>
+            {% else %}
+                <div class = "card-img">
+                    <img style="max-height:100%;max-width:100%;object-fit:contain;" src="static/img/student.png">
+                </div>
+                <div>
+                    <h4>{{ workout['name'] }}</h4>
+                    <p>Author: {{ workout['author'] }}</p>
+                    <p>{{ workout['description'] }}</p>
+                </div>
+            {% endif %}
         </a>
         <div class = "card-details">
+            {% if current_user.access > 1 %}
             <a type = "button" class = "btn-sm btn-bd-warning" href="{{ url_for('main.edit_workout', workout_id=workout['id']) }}">
                 <i class="bi bi-pencil-fill"></i>
             </a>
-            <!-- TODO: unlike button logic-->
-            <a type = "button" class = "btn-sm btn-bd-danger">
-                <i class = "bi bi-heart-fill text-danger"></i>
-            </a>
-
+            {% endif %}
         </div>
     </div>
 
