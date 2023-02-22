@@ -57,17 +57,18 @@ h1 {
     background-color: rgba(255, 255, 255, 0.841);
     box-shadow: 3px 3px 3px  #888888;
     max-width: 600px;
-    margin-left: calc(50% - 50vw);
+    margin: 50px auto;
     padding: 20px;
     display: flex;
     flex-direction: column;
 }
 .detail-info {
-    background-color: rgba(30, 30, 30, 0.887);
     padding: 20px;
+    background-color: rgba(30, 30, 30, 0.887);
 }
 .detail-info h2 {
     color: #dc3545;
+    margin: 0 auto;
 }
 .detail-info-header {
     display: flex;
@@ -76,7 +77,7 @@ h1 {
 }
 .detail-info-body {
     color: white;
-    padding: 20px;
+    
 }
 .muscle-info {
     border-bottom: 1px solid #dc3545;
@@ -87,24 +88,30 @@ h1 {
     font-size: 1.2rem;
 
 }
-.detail-wrapper, .workout-wrapper {
+.detail-wrapper, .edit-wrapper, .workout-wrapper {
     box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
     margin: 50px 0;
     display: flex;
     flex-direction: column;
 
 }
-.exercises-list {
-    border-top: 15px double #dc3545;
-    background-color: rgba(251, 239, 239, 0.49);
+.detail-body {
+    background-color: rgba(255, 255, 255, 0.841);
     padding: 20px;
+    border-top: 15px double #dc3545;
+}
+.add-exercises {
+    padding: 0 30px 30px 30px;
+}
+.exercises-list {
+    
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.exercises-list h2 {
+.exercises-list h2, .detail-body h2 {
     border-bottom: 3px solid #dc3545;
-    margin: 20px 0 30px 0;
+    margin: 10px 0 30px 0;
 }
 .exercises-list p {
     color: #888888;
@@ -114,6 +121,7 @@ h1 {
     color: #888888;
     font-weight: bold;
 }
+
 
 
 @media  screen and (min-width:768px) {
@@ -133,23 +141,27 @@ h1 {
     margin-left:8px;
 }
 .card-wrapper {
-
-    background-color: rgba(251, 239, 239, 0.49);
-    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px; 
+    background-color: rgba(219, 216, 216, 0.49);
     display: flex;
     padding: 5px;
-    width: 320px;
+    max-width: 300px;
     justify-content: space-between;
-    margin: 15px;
+    margin: 15px 0;
 
+}
+.card-wrapper:hover {
+    background-color: rgba(219, 216, 216, 0.828);
 }
 .card-content  {
     display: flex;
     color:gray;
     margin: 10px;
 }
+.card-content-workout {
+    flex-direction: column;
+}
 .card-content:hover  {
-    color: rgb(173, 18, 18);
     text-decoration: none;
 
 }
@@ -161,27 +173,45 @@ h1 {
 .card-content p {
     font-size: 1rem;
 }
-.card-content h4:hover {
-    color: rgb(173, 18, 18);
-}
+
 .card-img {
-    min-width:50px;
-    min-height: 50px;
+    min-width:70px;
+    min-height: 70px;
     width: 100px;
     height: 100px;
-    border: 1px solid red;
-    margin-right: 20px;
+    margin-right: 15px;
+    align-self: center;
 }
 .card-details{
     display: flex;
     flex-direction: column;
     align-items: flex-end;
 }
+.btn-bd-warning {
+    color: #ffc107;
+    border-radius: 50%;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.btn-bd-warning:hover {
+    background-color:#ffc10776;
+    color: white;
+    
+  }
+.btn-bd-danger {
+    color:rgb(198, 11, 11);
+    border-radius: 50%;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  }
+.btn-bd-danger:hover {
+    background-color:rgba(198, 11, 11, 0.36);
+    color: rgb(198, 11, 11);
+  }
 .cards-section-wrapper {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     margin: 30px 0;
+    justify-content: space-around;
 }
 .cards-section-wrapper p {
     color: #888888;
@@ -201,15 +231,25 @@ h1 {
 }
 .footer {
     background-color: rgb(66, 64, 64);
-    color: white;
-    padding: 30px 20px;
+    color: rgb(158, 158, 158);
+    padding: 60px 40px 30px 40px;
     min-height: 50px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     width: 100%;
     margin-top: auto;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px -3px 6px;
 }
 .footer ul {
     list-style-type: none;
+}
+.footer ul li a {
+    color: #dc3545;
+}
+.bufit-description {
+    max-width: 800px;
+}
+.social-media {
+    display: flex;
+    justify-content: center;
 }

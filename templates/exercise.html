@@ -9,9 +9,9 @@
     <div class="detail-info">
         <div class="detail-info-header">
             <h2>{% block name %} {{ exercise['name'] }} {% endblock %}</h2>
-            <form method="post">
+            <form action="{{ url_for('main.exercise', exercise_id=exercise['id']) }}" method="post">
                 <!-- TODO UNLIKE LOGIC -->
-                <button type = "button"  class = "btn btn-lg btn-danger">
+                <button type = "submit"  class = "btn btn-lg btn-bd-danger">
                     <i class = "bi bi-heart"></i>
                 </button>
             </form>
