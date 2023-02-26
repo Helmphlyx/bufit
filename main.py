@@ -1,6 +1,8 @@
 import os
 from typing import Optional
+import copy
 
+from functools import lru_cache
 from flask import render_template, request, url_for, flash, redirect
 from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
@@ -48,6 +50,7 @@ def check_exercise_name_exists(exercise_name: str):
     return count > 0
 
 
+@lru_cache(maxsize=None)
 def get_all_exercises_with_muscles():
     """Get all exercises with their muscle group."""
     db_utils = SqliteUtilites(DATABASE_NAME)
@@ -61,6 +64,7 @@ def get_all_exercises_with_muscles():
     return exercises
 
 
+@lru_cache(maxsize=None)
 def get_all_exercises_by_muscles(muscle: str):
     """Get all exercises by a muscle group."""
     db_utils = SqliteUtilites(DATABASE_NAME)
@@ -358,6 +362,7 @@ def delete_workout_by_id(workout_id: int):
     return
 
 
+@lru_cache(maxsize=None)
 def get_muscle_id_for_muscle(muscle: str):
     """Get workout by ID."""
     db_utils = SqliteUtilites(DATABASE_NAME)
@@ -445,6 +450,7 @@ def get_selected_exercise(exercise_id: int):
     return selected_exercise_artifact
 
 
+@lru_cache(maxsize=None)
 def get_all_muscles():
     """Get all muscle categories."""
     db_utils = SqliteUtilites(DATABASE_NAME)
@@ -587,7 +593,7 @@ def library():
 @login_required
 def search_exercises():
     """Search exercise page."""
-    muscles = get_all_muscles()
+    muscles = copy.copy(get_all_muscles())
     muscles.insert(0, "All")
 
     if request.method == "POST":
@@ -612,7 +618,7 @@ def search_exercises():
 def search_workouts():
     """Search workouts page."""
     if request.method == "POST":
-        workout_name = sanitize_input(request.form.get("workout_name"))
+        workout_name = request.form.get("workout_name")
         if not workout_name:
             workouts = get_all_workouts_with_author_names()
         else:
