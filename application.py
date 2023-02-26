@@ -1,3 +1,4 @@
+import os
 import logging
 
 from flask import Flask
@@ -8,15 +9,20 @@ from settings import settings
 from models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_mail import Mail
+from secret_utils import get_secret_from_sm
 
 global_user = None
+bufit_secrets = get_secret_from_sm("bufit")
 
 
 def create_admin():
     admin_user = User(
-        email="bufitsite@gmail.com",
+        email=bufit_secrets.get("admin_email", "bufitsite@gmail.com"),
         name="admin",
-        password=generate_password_hash("Bufitcs633", method="sha256"),
+        password=generate_password_hash(
+            bufit_secrets.get("admin_password", "Bufitcs633"),
+            method="sha256"
+        ),
         access=2,
         is_confirmed=True,
     )
@@ -39,7 +45,7 @@ def create_app():
     app = Flask(__name__)
     app.config[
         "SECRET_KEY"
-    ] = "SOME_SECRET_KEY_VALUE"  # TODO: update secret value
+    ] = bufit_secrets.get("flask_secret_key	", "SOME_SECRET_KEY")
     app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
     app.config["UPLOAD_FOLDER"] = "static/images/"
     app.url_map.strict_slashes = False
@@ -49,8 +55,8 @@ def create_app():
         "MAIL_PORT": 465,
         "MAIL_USE_TLS": False,
         "MAIL_USE_SSL": True,
-        "MAIL_USERNAME": "bufitsite@gmail.com",
-        "MAIL_PASSWORD": "zsofxopzkulwrqnb",
+        "MAIL_USERNAME": bufit_secrets.get("admin_email", "bufitsite@gmail.com"),
+        "MAIL_PASSWORD": bufit_secrets.get("email_password"),
     }
     app.config.update(mail_settings)
 
