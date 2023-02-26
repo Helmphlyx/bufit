@@ -54,8 +54,11 @@ def init_exercise_table():
         # save image locally to avoid excessive requests
         if exercise_image != default_image:
             image_file_name = f"static/images/{exercise_image.split('/')[-1]}"
-            urllib.request.urlretrieve(exercise_image, image_file_name)
-            exercise_image = "/" + image_file_name
+            try:
+                urllib.request.urlretrieve(exercise_image, image_file_name)
+                exercise_image = "/" + image_file_name
+            except Exception as exc:
+                exercise_image = default_image
 
         image_dict[exercise_base] = exercise_image
 
