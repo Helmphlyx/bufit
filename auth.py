@@ -207,7 +207,7 @@ def create_user():
 @login_required
 @requires_access_level(ACCESS["admin"])
 def create_user_post():
-    """Handle user signup."""
+    """Handle creating user page."""
     email = request.form.get("email")
     name = request.form.get("name")
     password = request.form.get("password")
@@ -218,19 +218,19 @@ def create_user_post():
 
     if not email:
         flash("An email address must be provided")
-        return redirect(url_for("main.create_user"))
+        return redirect(url_for("auth.create_user"))
     if not name:
         flash("A username must be provided")
-        return redirect(url_for("main.create_user"))
+        return redirect(url_for("auth.create_user"))
     if not password:
         flash("A password must be provided")
-        return redirect(url_for("main.create_user"))
+        return redirect(url_for("auth.create_user"))
     if email_user:
         flash("Email address already exists")
-        return redirect(url_for("main.create_user"))
+        return redirect(url_for("auth.create_user"))
     if name_user:
         flash("Username already taken")
-        return redirect(url_for("main.create_user"))
+        return redirect(url_for("auth.create_user"))
 
     new_user = User(
         email=email,
