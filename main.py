@@ -15,8 +15,6 @@ from models import User, requires_access_level, ACCESS
 
 from settings import settings
 
-from helpers import sanitize_input
-
 DEFAULT_EXERCISE_IMAGE_PATH = "/static/img/example-exercise-img.jpg"
 DATABASE_NAME = settings.DATABASE_NAME
 main = Blueprint("main", __name__)
@@ -338,7 +336,7 @@ def update_workout_description(workout_id: int, description: str):
     return
 
 
-def create_new_workout(name: int, user_id: int, description: str, coach_flag: bool):
+def create_new_workout(name: str, user_id: int, description: str, coach_flag: bool):
     """Create workout into workout table."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     coach_value = 1 if coach_flag else 0
@@ -474,9 +472,9 @@ def create_exercise():
     muscles = get_all_muscles()
 
     if request.method == "POST":
-        name = sanitize_input(request.form.get("name"))
+        name = request.form.get("name")
         muscle = request.form.get("muscle")
-        description = sanitize_input(request.form.get("description"))
+        description = request.form.get("description")
         image = request.files["image"]
 
         if not name:
@@ -505,7 +503,7 @@ def create_exercise():
 def create_workout():
     """Create a workout page."""
     if request.method == "POST":
-        name = sanitize_input(request.form.get("name"))
+        name = request.form.get("name")
 
         if not name:
             flash("Name is required!")
@@ -516,9 +514,7 @@ def create_workout():
                     " different name..."
                 )
             else:
-                description = sanitize_input(
-                    request.form.get("description", "")
-                )
+                description = request.form.get("description", "")
 
                 coach_flag = current_user.access > 0
 
