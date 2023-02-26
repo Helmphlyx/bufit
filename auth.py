@@ -22,7 +22,6 @@ def login_post():
     """Handle user login."""
     email = request.form.get("email")
     password = request.form.get("password")
-    remember = True if request.form.get("remember") else False
 
     user = User.query.filter_by(email=email).first()
 
@@ -35,7 +34,7 @@ def login_post():
     elif user.is_confirmed is False:
         flash("User account is not confirmed. Please check your email.")
         return redirect(url_for("auth.login"))
-    login_user(user, remember=remember)
+    login_user(user, remember=True)
     return redirect(url_for("main.home"))
 
 
@@ -51,6 +50,7 @@ def signup_post():
     email = request.form.get("email")
     name = request.form.get("name")
     password = request.form.get("password")
+    password_check = request.form.get("password_check")
 
     email_user = User.query.filter_by(email=email).first()
     name_user = User.query.filter_by(name=name).first()
@@ -63,6 +63,9 @@ def signup_post():
         return redirect(url_for("auth.signup"))
     if not password:
         flash("A password must be provided")
+        return redirect(url_for("auth.signup"))
+    if password != password_check:
+        flash("Passwords do not match! Please try again")
         return redirect(url_for("auth.signup"))
     if email_user:
         flash("Email address already exists! Please login.")
@@ -168,9 +171,18 @@ def reset_password(token):
 
     if request.method == "POST":
         password = request.form.get("password")
+        password_check = request.form.get("password_check")
 
         if not password:
             flash("A new password must be provided")
+            token = ts.dumps(email, salt="email-confirm-key")
+            return redirect(url_for("auth.reset_password", token=token))
+        if not password_check:
+            flash("A password check must be provided")
+            token = ts.dumps(email, salt="email-confirm-key")
+            return redirect(url_for("auth.reset_password", token=token))
+        if password != password_check:
+            flash("Passwords do not match! Please try again")
             token = ts.dumps(email, salt="email-confirm-key")
             return redirect(url_for("auth.reset_password", token=token))
 
