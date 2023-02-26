@@ -11,7 +11,7 @@
             padding:0;
             margin:0;
         }
-        
+
     </style>
     <div class="edit-wrapper">
         <div class = "detail-info">
@@ -27,7 +27,7 @@
                         value="{{ request.form['name'] or exercise['name'] }}">
                     </input>
                 </div>
-        
+
                 <div class="form-group">
                     <label for="muscle">Target Muscle</label>
                     <select name=muscle class="form-control">
@@ -36,24 +36,24 @@
                         {% endfor %}
                     </select>
                 </div>
-        
+
                 <div class="form-group">
                     <label for="description">Description</label>
                     <textarea name="description" placeholder="Exercise Description"
                             class="form-control">{{ request.form['description'] or exercise['description'] }}</textarea>
                 </div>
-        
+
                 <div class="form-group">
                     <label for='image'>Image</label>
                     <input type = "file" name = "image" />
                 </div>
-        
+
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
             <hr>
-        
+
             <form action="{{ url_for('main.delete', id=exercise['id']) }}" method="POST">
                 <input type="submit" value="Delete Exercise"
                     class="btn btn-danger btn-sm"

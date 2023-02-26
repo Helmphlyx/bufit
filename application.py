@@ -20,8 +20,7 @@ def create_admin():
         email=bufit_secrets.get("admin_email", "bufitsite@gmail.com"),
         name="admin",
         password=generate_password_hash(
-            bufit_secrets.get("admin_password", "Bufitcs633"),
-            method="sha256"
+            bufit_secrets.get("admin_password", "Bufitcs633"), method="sha256"
         ),
         access=2,
         is_confirmed=True,
@@ -43,9 +42,9 @@ def create_app():
         logging.warning("BuFit web app configured with SQLITE db.")
 
     app = Flask(__name__)
-    app.config[
-        "SECRET_KEY"
-    ] = bufit_secrets.get("flask_secret_key	", "SOME_SECRET_KEY")
+    app.config["SECRET_KEY"] = bufit_secrets.get(
+        "flask_secret_key	", "SOME_SECRET_KEY"
+    )
     app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
     app.config["UPLOAD_FOLDER"] = "static/images/"
     app.url_map.strict_slashes = False
@@ -55,7 +54,9 @@ def create_app():
         "MAIL_PORT": 465,
         "MAIL_USE_TLS": False,
         "MAIL_USE_SSL": True,
-        "MAIL_USERNAME": bufit_secrets.get("admin_email", "bufitsite@gmail.com"),
+        "MAIL_USERNAME": bufit_secrets.get(
+            "admin_email", "bufitsite@gmail.com"
+        ),
         "MAIL_PASSWORD": bufit_secrets.get("email_password"),
     }
     app.config.update(mail_settings)
@@ -82,7 +83,7 @@ def create_app():
 app = create_app()
 mail = Mail(app)
 login_manager = LoginManager(app)
-login_manager.login_view = 'auth.login'
+login_manager.login_view = "auth.login"
 
 application = app
 
@@ -93,5 +94,5 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     application.run()

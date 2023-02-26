@@ -11,7 +11,7 @@
             padding:0;
             margin:0;
         }
-        
+
     </style>
     <div class = "edit-wrapper">
         <div class = "detail-info">
@@ -34,13 +34,13 @@
                     {% else %}
                     <p>No exercises have been added.</p>
                     {% endif %}
-            
+
                     <a href="{{ url_for('main.edit_workout', workout_id=workout['id']) }}">
                         <span class="badge badge-warning">Continue Editing Workout</span>
                     </a>
                     </form>
             </div>
-            
+
         </div>
     </div>
 </body>

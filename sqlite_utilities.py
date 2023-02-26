@@ -3,7 +3,6 @@ from typing import Optional
 from db.utilities.db_utilities import DatabaseUtilities
 import sqlite3
 
-import os
 import mysql.connector
 from settings import settings
 
@@ -18,23 +17,25 @@ class SqliteUtilites(DatabaseUtilities):
         """Return DB connection."""
         if settings.MYSQL_CREDENTIALS["NAME"]:
             conn = mysql.connector.connect(
-                host=settings.MYSQL_CREDENTIALS.get('HOST'),
-                user=settings.MYSQL_CREDENTIALS.get('USER'),
-                password=settings.MYSQL_CREDENTIALS.get('PASSWORD'),
-                database=settings.MYSQL_CREDENTIALS.get('PORT')
+                host=settings.MYSQL_CREDENTIALS.get("HOST"),
+                user=settings.MYSQL_CREDENTIALS.get("USER"),
+                password=settings.MYSQL_CREDENTIALS.get("PASSWORD"),
+                database=settings.MYSQL_CREDENTIALS.get("PORT"),
             )
         else:
-            conn = sqlite3.connect(self.db_name, isolation_level=None)  # defaults auto-commit mode
+            conn = sqlite3.connect(
+                self.db_name, isolation_level=None
+            )  # defaults auto-commit mode
             conn.row_factory = sqlite3.Row
         return conn
 
     def execute(
-            self,
-            sql: str,
-            params: Optional[tuple] = None,
-            fetch_all: bool = False,
-            commit: bool = False,
-            row_id: bool = False,
+        self,
+        sql: str,
+        params: Optional[tuple] = None,
+        fetch_all: bool = False,
+        commit: bool = False,
+        row_id: bool = False,
     ):
         """
         Execute passed SQL on db.
