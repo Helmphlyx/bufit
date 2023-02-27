@@ -57,7 +57,7 @@ def create_app():
         "MAIL_USERNAME": bufit_secrets.get(
             "admin_email", "bufitsite@gmail.com"
         ),
-        "MAIL_PASSWORD": bufit_secrets.get("email_password"),
+        "MAIL_PASSWORD": bufit_secrets.get("email_password"),  # TODO: developers need to default bufit email password for local testing
     }
     app.config.update(mail_settings)
 
