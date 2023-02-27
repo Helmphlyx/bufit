@@ -1,5 +1,6 @@
 import re
 import requests
+import urllib.request
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlite_utilities import SqliteUtilites
@@ -13,6 +14,7 @@ def init_db():
     """Initialize database tables and initial values."""
     db_utils = SqliteUtilites(DATABASE_NAME)
     db_utils.execute_from_file("db/sql/create_tables.sql")
+    db_utils.execute("pragma journal_mode=wal")  # Sets WAL mode
     init_muscle_table()
     init_exercise_table()
 
@@ -48,6 +50,16 @@ def init_exercise_table():
     for exercise_image_data in exercises_image_data:
         exercise_base = exercise_image_data.get("exercise_base")
         exercise_image = exercise_image_data.get("image", default_image)
+
+        # save image locally to avoid excessive requests
+        if exercise_image != default_image:
+            image_file_name = f"static/images/{exercise_image.split('/')[-1]}"
+            try:
+                urllib.request.urlretrieve(exercise_image, image_file_name)
+                exercise_image = "/" + image_file_name
+            except Exception as exc:
+                exercise_image = default_image
+
         image_dict[exercise_base] = exercise_image
 
     # Set up exercises

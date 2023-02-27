@@ -78,7 +78,7 @@ h1 {
 }
 .detail-info-body {
     color: white;
-    
+
 }
 .muscle-info {
     border-bottom: 1px solid #dc3545;
@@ -105,7 +105,7 @@ h1 {
     padding: 0 30px 30px 30px;
 }
 .exercises-list {
-    
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -140,7 +140,7 @@ h1 {
     margin-left:8px;
 }
 .card-wrapper {
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px; 
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
     background-color: rgba(219, 216, 216, 0.49);
     display: flex;
     padding: 5px;
@@ -194,7 +194,7 @@ h1 {
 .btn-bd-warning:hover {
     background-color:#ffc10776;
     color: white;
-    
+
   }
 .btn-bd-danger {
     color:rgb(198, 11, 11);
